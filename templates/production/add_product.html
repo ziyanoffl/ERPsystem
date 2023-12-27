@@ -1,0 +1,27 @@
+{% extends 'sidenav.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+    <div class="mb-3">
+
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Production Management</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Add Product</li>
+        </ol>
+    </div>
+
+    <div class="mb-3">
+        <h4>Welcome, {{ user.username }}</h4>
+    </div>
+
+    <div class="mb-3">
+        <form action="{% url 'create_product' %}" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <button class="btn btn-outline-light btn-lg px-5" type="submit">Save Product</button>
+        </form>
+
+    </div>
+
+
+{% endblock %}

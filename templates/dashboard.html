@@ -1,39 +1,111 @@
 {% extends 'sidenav.html' %}
-
+{% block title %}Dashboard{% endblock %}
 {% block content %}
-<div class="mb-3">
-    <h4>Admin Dashboard</h4>
-  </div>
+    {% if login_success %}
+        <div id="loginSuccessNotification" class="alert alert-success alert-dismissible fade show" role="alert">
+            You have successfully logged in!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
 
-  <div class="row">
-    <div class="col-12 col-md-6 d-flex">
-      <div class="card flex-fill border-0 illustration">
-        <div class="card-body p-0 d-flex flex-fill">
-          <div class="row g-0 w-100">
-            <div class="col-6">
-              <div class="p-3 m-1">
-                <h4>Welcome Back, Admin</h4>
-                <p class="mb-0">Dashboard</p>
-              </div>
+        <script>
+            // Automatically close the notification after 5 seconds
+            setTimeout(function () {
+                closeNotification();
+            }, 5000);
+
+            function closeNotification() {
+                var notification = document.getElementById('loginSuccessNotification');
+                if (notification) {
+                    notification.style.display = 'none';
+                }
+            }
+        </script>
+    {% endif %}
+    <div class="mb-3">
+
+        <h4>Admin Dashboard</h4>
+    </div>
+
+    <div class="mb-3">
+        <h4>Welcome, {{ user.username }}</h4>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Total Users</h5>
+                    <p class="card-text">
+                        <span id="totalUsers">{{ totalUsers }}</span> users registered
+                    </p>
+                </div>
             </div>
-            <div class="col-6 align-self-end text-end"></div>
-          </div>
         </div>
-      </div>
-    </div>
-    <div class="col-12 col-md-6 d-flex">
-      <div class="card flex-fill border-0">
-        <div class="card-body py-4">
-          <div class="d-flex align-items-start">
-            <div class="flex-grow-1"></div>
-          </div>
+
+        <div class="col-md-3">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Revenue</h5>
+                    <p class="card-text">
+                        Revenue: $<span id="totalRevenue">{{ totalRevenue }}</span>
+                    </p>
+                </div>
+            </div>
         </div>
-      </div>
+
+        <div class="col-md-3">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">New customers</h5>
+                    <p class="card-text">
+                        <span id="">5</span>
+                    </p>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-  <!-- Table Element -->
-  <div class="card border-0">
-    <div class="card-header"></div>
-    <div class="card-body"></div>
-  </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Sales Chart</h5>
+                    <canvas id="salesChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Mock data
+        var totalUsers = Math.floor(Math.random() * 1000) + 500;
+        var totalRevenue = Math.floor(Math.random() * 100000) + 50000;
+
+        document.getElementById('totalUsers').innerText = totalUsers;
+        document.getElementById('totalRevenue').innerText = totalRevenue;
+
+        // Chart.js
+        var ctx = document.getElementById('salesChart').getContext('2d');
+        var salesChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'Monthly Sales',
+                    data: [120, 150, 200, 180, 250, 220],
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
 {% endblock %}

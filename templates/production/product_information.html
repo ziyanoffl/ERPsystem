@@ -1,0 +1,22 @@
+{% extends 'sidenav.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+    <div class="mb-3">
+
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Production Management</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Products Information</li>
+        </ol>
+    </div>
+
+    <div class="mb-3">
+        <h4>Welcome, {{ user.username }}</h4>
+    </div>
+
+    <div class="mb-3">
+    <h2>Product list</h2>
+
+    </div>
+
+
+{% endblock %}
