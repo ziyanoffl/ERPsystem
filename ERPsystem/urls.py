@@ -19,7 +19,7 @@ from django.contrib.auth.views import LogoutView
 from django.urls import path
 
 from ERPsystem.views import home_view, login_view, signup_view, custom_login
-from Inventory.views import warehouse_management_view
+from Inventory.views import warehouse_management_view, warehouse_update, warehouse_delete, raw_material_view
 from Production.views import product_info_view, create_product
 
 urlpatterns = [
@@ -36,6 +36,10 @@ urlpatterns = [
 
     # Inventory section
     path('warehouse', warehouse_management_view, name='warehouse_management_view'),
+    path('warehouse/update/<int:pk>/', warehouse_update, name='warehouse_update'),
+    path('warehouse/delete/<int:pk>/', warehouse_delete, name='warehouse_delete'),
+
+    path('raw_material', raw_material_view, name='raw_material_view'),
 
     # path('custom-signup/', custom_signup, name='custom_signup'),
 ]
