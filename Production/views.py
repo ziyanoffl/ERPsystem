@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from ERPsystem.forms import ProductForm
+from .forms import ProductForm
 
 
 # Create your views here.

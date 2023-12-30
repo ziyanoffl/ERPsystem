@@ -1,0 +1,26 @@
+{% extends 'sidenav.html' %}
+{% block title %}Warehouse{% endblock %}
+{% block content %}
+    <div class="mb-3">
+
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Production Management</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Warehouse Management</li>
+        </ol>
+    </div>
+
+    <div class="mb-3">
+    <h4>Warehouse list</h4>
+
+    <h4 class="mt-3">Add new Warehouse</h4>
+
+        <form action="" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn btn-outline-dark px-5" type="submit">Save Product</button>
+        </form>
+
+    </div>
+
+
+{% endblock %}
