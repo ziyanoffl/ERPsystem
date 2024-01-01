@@ -1,27 +1,96 @@
 {% extends 'sidenav.html' %}
-{% block title %}Dashboard{% endblock %}
+{% block title %}Production Management{% endblock %}
 {% block content %}
     <div class="mb-3">
 
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="#">Production Management</a></li>
+            <li class="breadcrumb-item" aria-current="page"><a href="#">View Products</a></li>
             <li class="breadcrumb-item active" aria-current="page">Add Product</li>
         </ol>
     </div>
 
-    <div class="mb-3">
-        <h4>Welcome, {{ user.username }}</h4>
-    </div>
 
-    <div class="mb-3">
-        <form action="{% url 'create_product' %}" method="post">
+    <div class="row">
+        <form method="post" class="mt-5">
             {% csrf_token %}
-            {{ form.as_p }}
+            <div class="col-4">
+                <!-- Product Fields -->
+                <div class="mb-3">
+                    <label for="product_name" class="form-label">Product Name:</label>
+                    <input type="text" name="product_name" class="form-control" required>
+                </div>
 
-            <button class="btn btn-outline-light btn-lg px-5" type="submit">Save Product</button>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description:</label>
+                    <textarea name="description" class="form-control" required></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="unit_price" class="form-label">Unit Price:</label>
+                    <input type="text" name="unit_price" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="quantity_in_stock" class="form-label">Quantity in Stock:</label>
+                    <input type="text" name="quantity_in_stock" class="form-control" value="0" required>
+                </div>
+            </div>
+
+            <div class="col-6">
+                <!-- Raw Material Fields -->
+                <h2>Raw Materials</h2>
+                <div id="raw-material-container" class="mb-3">
+                    <div class="raw-material-row" id="raw-material-row-template">
+                        <label class="form-label">Raw Material:</label>
+                        <select name="raw_material" class="form-select raw-material-select" required>
+                            {% for raw_material in raw_materials %}
+                                <option value="{{ raw_material.raw_material_id }}">{{ raw_material.material_name }}</option>
+                            {% endfor %}
+                        </select>
+                        <label class="form-label">Quantity Required:</label>
+                        <input type="text" name="quantity_required" class="form-control" required>
+                        <button type="button" class="btn btn-danger remove-row">Remove</button>
+                    </div>
+                </div>
+
+                <button type="button" id="add-row" class="btn btn-primary">Add Raw Material</button>
+
+                <input type="submit" value="Save" class="btn btn-success">
+            </div>
+
+
         </form>
-
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            var rowTemplate = $('#raw-material-row-template').html();
+            var rowCount = 1;
+
+            // Add new row
+            $('#add-row').click(function () {
+                var newRow = rowTemplate.replace(/__prefix__/g, rowCount);
+
+                // Exclude selected raw materials from previous rows
+                $('.raw-material-select').each(function () {
+                    var selectedRawMaterial = $(this).val();
+                    newRow = newRow.replace(new RegExp('<option value="' + selectedRawMaterial + '">', 'g'), '<option value="' + selectedRawMaterial + '" disabled>');
+                });
+
+                $('#raw-material-container').append(newRow);
+                rowCount++;
+            });
+
+            // Remove row
+            $('#raw-material-container').on('click', '.remove-row', function () {
+                $(this).closest('.raw-material-row').remove();
+            });
+        });
+    </script>
+
 
 
 {% endblock %}

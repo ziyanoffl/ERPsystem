@@ -4,7 +4,7 @@ from .forms import WarehouseForm, RawMaterialForm
 from .models import Warehouse, RawMaterial
 
 
-# WQarehouse Management
+# Warehouse Management
 def warehouse_management_view(request):
     warehouses = Warehouse.objects.all()
     if request.method == 'POST':
@@ -42,15 +42,47 @@ def warehouse_delete(request, pk):
     return render(request, 'inventory/warehouse.html', {'warehouse': warehouse})
 
 
-# Raw material Mangement
+#####################################
+# Raw material Management
+#####################################
 def raw_material_view(request):
     raw_materials = RawMaterial.objects.all()
     if request.method == 'POST':
         form = RawMaterialForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('warehouse_management_view')  # Redirect to a success page or another view
+            return redirect('raw_material_view')  # Redirect to a success page or another view
     else:
         form = RawMaterialForm()
     context = {'form': form, 'raw_materials': raw_materials}
+    return render(request, 'inventory/raw_materials.html', context)
+
+
+def raw_material_update(request, pk):
+    raw_materials = get_object_or_404(RawMaterial, pk=pk)
+
+    if request.method == 'POST':
+        form = RawMaterialForm(request.POST, instance=raw_materials)
+        if form.is_valid():
+            form.save()
+            return redirect('raw_material_view')
+    else:
+        form = RawMaterialForm(instance=raw_materials)
+
+    return render(request, 'inventory/raw_material_update.html', {'form': form, 'raw_materials': raw_materials})
+
+
+#####################################
+# Product Management
+#####################################
+
+def create_product(request):
+    if request.method == 'POST':
+        form = RawMaterialForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('raw_material_view')  # Redirect to a success page or another view
+    else:
+        form = RawMaterialForm()
+    context = {'form': form}
     return render(request, 'inventory/raw_materials.html', context)

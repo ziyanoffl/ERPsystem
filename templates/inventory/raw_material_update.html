@@ -1,0 +1,28 @@
+{% extends 'sidenav.html' %}
+{% block title %}Inventory Management{% endblock %}
+{% block content %}
+    <div class="mb-3">
+
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Inventory Management</a></li>
+            <li class="breadcrumb-item" aria-current="page"><a href="{% url 'raw_material_view' %}">Raw Materials</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Raw Material update</li>
+        </ol>
+    </div>
+
+    <div class="mb-3">
+        <h4 class="mt-3">Update Raw Material</h4>
+
+        <form action="" method="post">
+            {% csrf_token %}
+            <div class="col-3">
+                {{ form.as_p }}
+            </div>
+            <button class="btn btn-outline-dark px-5" type="submit">Update</button>
+        </form>
+
+
+    </div>
+
+
+{% endblock %}

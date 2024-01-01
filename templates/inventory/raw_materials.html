@@ -23,11 +23,12 @@
         <h4 class="mt-5">Raw Materials list</h4>
         <div class="row">
             <div class="col-12">
-                <table class="table">
+                <table id="example" class="table table-striped">
                     <thead>
                     <tr>
-                        <th scope="col"></th>
                         <th scope="col">Raw Material Name</th>
+                        <th scope="col">Raw Material Description</th>
+                        <th scope="col">Cost (Per unit)</th>
                         <th scope="col">Actions</th>
                     </tr>
                     </thead>
@@ -35,7 +36,14 @@
                     {% for raw_material in raw_materials %}
                         <tr>
                             <td>{{ raw_material.material_name }}</td>
-                            <td></td>
+                            <td>{{ raw_material.description }}</td>
+                            <td>{{ raw_material.cost }}</td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a href="{% url 'raw_material_update' raw_material.raw_material_id %}"
+                                       class="btn btn-sm btn-primary">Update</a>
+                                </div>
+                            </td>
 
                         </tr>
                     {% endfor %}

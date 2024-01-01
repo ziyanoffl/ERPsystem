@@ -18,8 +18,10 @@ from django.contrib import admin
 from django.contrib.auth.views import LogoutView
 from django.urls import path
 
+from CRM.views import customer_management_view, customer_update, supplier_management_view, supplier_update
 from ERPsystem.views import home_view, login_view, signup_view, custom_login
-from Inventory.views import warehouse_management_view, warehouse_update, warehouse_delete, raw_material_view
+from Inventory.views import warehouse_management_view, warehouse_update, warehouse_delete, raw_material_view, \
+    raw_material_update
 from Production.views import product_info_view, create_product
 
 urlpatterns = [
@@ -30,16 +32,27 @@ urlpatterns = [
     path('custom-login/', custom_login, name='custom_login'),
     path('logout/', LogoutView.as_view(next_page='login_view'), name='logout'),
 
-    # production section
+    # production section #####################################
     path('product', product_info_view, name='product_info_view'),
     path('add-product', create_product, name='create_product'),
 
-    # Inventory section
+    # Inventory section ######################################
     path('warehouse', warehouse_management_view, name='warehouse_management_view'),
     path('warehouse/update/<int:pk>/', warehouse_update, name='warehouse_update'),
     path('warehouse/delete/<int:pk>/', warehouse_delete, name='warehouse_delete'),
 
     path('raw_material', raw_material_view, name='raw_material_view'),
+    path('raw_material/update/<int:pk>/', raw_material_update, name='raw_material_update'),
+
+    # CRM ####################################################
+    path('CRM/customers', customer_management_view, name='customer_management_view'),
+    path('CRM/customers/update/<int:pk>/', customer_update, name='customer_update'),
+
+    path('CRM/suppliers', supplier_management_view, name='supplier_management_view'),
+    path('CRM/suppliers/update/<int:pk>/', supplier_update, name='supplier_update'),
+
+    # path('CRM/suppliers', supplier_management_view, name='customer_management_view'),
+    # path('CRM/suppliers/update/<int:pk>/', supplier_update, name='supplier_update'),
 
     # path('custom-signup/', custom_signup, name='custom_signup'),
 ]

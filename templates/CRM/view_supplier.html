@@ -1,0 +1,59 @@
+{% extends 'sidenav.html' %}
+{% block title %}CRM{% endblock %}
+{% block content %}
+    <div class="mb-3">
+
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">CRM</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Supplier Management</li>
+        </ol>
+    </div>
+
+    <div class="mb-3">
+        <h4 class="mt-3">Add new Supplier</h4>
+
+        <form action="" method="post">
+            {% csrf_token %}
+            <div class="col-3">
+                {{ form.as_p }}
+            </div>
+            <button class="btn btn-outline-dark px-5" type="submit">Add</button>
+        </form>
+
+        <h4 class="mt-5">Supplier list</h4>
+        <div class="row">
+            <div class="col-lg-12">
+                <table id="example" class="table table-striped" style="width:100%">
+                    <thead>
+                    <tr>
+                        <th scope="col">Supplier Name</th>
+                        <th scope="col">Phone</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Address</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for supplier in suppliers %}
+                        <tr>
+                            <td>{{ supplier.name }}</td>
+                            <td>{{ supplier.phone }}</td>
+                            <td>{{ supplier.email }}</td>
+                            <td>{{ supplier.address }}</td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a href="{% url 'supplier_update' supplier.id %}" class="btn btn-sm btn-primary">Update</a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+    </div>
+
+
+{% endblock %}
