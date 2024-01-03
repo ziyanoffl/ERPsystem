@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 
 from .forms import WarehouseForm, RawMaterialForm
-from .models import Warehouse, RawMaterial
+from .models import Warehouse, RawMaterial, RawMaterialInventory
 
 
 # Warehouse Management
@@ -70,6 +70,12 @@ def raw_material_update(request, pk):
         form = RawMaterialForm(instance=raw_materials)
 
     return render(request, 'inventory/raw_material_update.html', {'form': form, 'raw_materials': raw_materials})
+
+
+def raw_material_inventory_list(request):
+    raw_material_list = RawMaterialInventory.objects.all()
+    return render(request, 'inventory/view_available_raw_materials.html',
+                  {'raw_material_inventory_list': raw_material_list})
 
 
 #####################################

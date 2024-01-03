@@ -23,6 +23,9 @@ class Warehouse(models.Model):
     name = models.CharField(max_length=255)
     location = models.CharField(max_length=255)
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         db_table = 'warehouse'
 
@@ -31,7 +34,7 @@ class RawMaterialInventory(models.Model):
     raw_material = models.ForeignKey(RawMaterial, on_delete=models.CASCADE)
     warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE)
     quantity_on_hand = models.PositiveIntegerField(default=0, validators=[MinValueValidator(0)])
-    last_updated = models.DateTimeField(auto_now=True)
+    last_updated = models.DateField(auto_now=True)
     unit_cost = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
     total_cost = models.DecimalField(max_digits=12, decimal_places=2, default=0.0)
 

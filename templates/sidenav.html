@@ -60,10 +60,10 @@
                             data-bs-parent="#sidebar"
                     >
                         <li class="sidebar-item">
-                            <a href="#" class="sidebar-link">View Purchase Orders</a>
+                            <a href="{% url 'purchase_order_list' %}" class="sidebar-link">View Purchase Orders</a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="#" class="sidebar-link">Add new Purchase order</a>
+                            <a href="{% url 'create_purchase_order' %}" class="sidebar-link">Add new Purchase order</a>
                         </li>
                     </ul>
                 </li>
@@ -94,7 +94,7 @@
                             <a href="#" class="sidebar-link">View Production Orders</a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="#" class="sidebar-link">Add new Production Order</a>
+                            <a href="{% url 'create_production_order' %}" class="sidebar-link">Add new Production Order</a>
                         </li>
                     </ul>
                 </li>
@@ -119,7 +119,7 @@
                             <a href="#" class="sidebar-link">View Sales orders</a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="#" class="sidebar-link">Add new Sales order</a>
+                            <a href="{% url 'add_sales_order' %}" class="sidebar-link">Add new Sales order</a>
                         </li>
                     </ul>
                 </li>
@@ -141,10 +141,13 @@
                             data-bs-parent="#sidebar"
                     >
                         <li class="sidebar-item">
-                            <a href="{% url 'raw_material_view' %}" class="sidebar-link">Raw materials</a>
+                            <a href="{% url 'raw_material_view' %}" class="sidebar-link">View/Add Raw materials</a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="{% url 'warehouse_management_view' %}" class="sidebar-link">View Warehouses</a>
+                            <a href="{% url 'raw_material_inventory_list' %}" class="sidebar-link">View Available Raw Materials</a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="{% url 'warehouse_management_view' %}" class="sidebar-link">View/Add Warehouses</a>
                         </li>
                     </ul>
                 </li>

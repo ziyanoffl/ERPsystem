@@ -21,8 +21,10 @@ from django.urls import path
 from CRM.views import customer_management_view, customer_update, supplier_management_view, supplier_update
 from ERPsystem.views import home_view, login_view, signup_view, custom_login
 from Inventory.views import warehouse_management_view, warehouse_update, warehouse_delete, raw_material_view, \
-    raw_material_update
-from Production.views import product_info_view, create_product
+    raw_material_update, raw_material_inventory_list
+from Production.views import product_info_view, create_product, CreateProductionOrderView
+from PurchaseOrder.views import create_purchase_order, purchase_order_list
+from SalesOrder.views import add_sales_order
 
 urlpatterns = [
     path('', home_view, name='home_view'),
@@ -32,9 +34,14 @@ urlpatterns = [
     path('custom-login/', custom_login, name='custom_login'),
     path('logout/', LogoutView.as_view(next_page='login_view'), name='logout'),
 
+    # Purchase Order section #################################
+    path('Purchase-Management/add-new', create_purchase_order, name='create_purchase_order'),
+    path('Purchase-Management/view-orders', purchase_order_list, name='purchase_order_list'),
+
     # production section #####################################
     path('product', product_info_view, name='product_info_view'),
     path('add-product', create_product, name='create_product'),
+    path('create_production_order/', CreateProductionOrderView.as_view(), name='create_production_order'),
 
     # Inventory section ######################################
     path('warehouse', warehouse_management_view, name='warehouse_management_view'),
@@ -43,6 +50,7 @@ urlpatterns = [
 
     path('raw_material', raw_material_view, name='raw_material_view'),
     path('raw_material/update/<int:pk>/', raw_material_update, name='raw_material_update'),
+    path('raw_material_inventory/', raw_material_inventory_list, name='raw_material_inventory_list'),
 
     # CRM ####################################################
     path('CRM/customers', customer_management_view, name='customer_management_view'),
@@ -54,5 +62,7 @@ urlpatterns = [
     # path('CRM/suppliers', supplier_management_view, name='customer_management_view'),
     # path('CRM/suppliers/update/<int:pk>/', supplier_update, name='supplier_update'),
 
+    # Sales Management #######################################
+    path('add_sales_order/', add_sales_order, name='add_sales_order'),
     # path('custom-signup/', custom_signup, name='custom_signup'),
 ]

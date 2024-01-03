@@ -1,0 +1,116 @@
+{% extends 'sidenav.html' %}
+{% block title %}Sales Management{% endblock %}
+{% block content %}
+    <div class="mb-3">
+
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Sales Management</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Add new Sales Order</li>
+        </ol>
+    </div>
+
+    <div class="mb-3">
+        <h2>Add Sales Order</h2>
+        <form method="post" action="{% url 'add_sales_order' %}" id="salesOrderForm">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <div id="productRows">
+                <!-- Initial product row -->
+                <div class="productRow">
+                    <label for="product[]">Product:</label>
+                    <select name="product[]" class="product" onchange="disableSelectedOptions(this)">
+                        <!-- Add options for products -->
+                        {% for product in products %}
+                            <option value="{{ product.product_id }}">{{ product.product_name }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <!-- Other fields for sales order item -->
+                    <label for="product_quantity[]">Quantity:</label>
+                    <input type="number" name="product_quantity[]" class="quantity">
+
+                    <!-- Add other fields for sales order item (unit_price, total_price, etc.) -->
+                </div>
+            </div>
+
+            <button type="button" onclick="addProductRow()">Add Product</button>
+            <button type="button" onclick="removeLastProductRow()">Remove Last Product</button>
+            <input type="submit" value="Save">
+        </form>
+
+        <script>
+            // Function to add a new product row
+            function addProductRow() {
+                // Clone the last product row
+                var lastRow = $(".productRow:last");
+                var newRow = lastRow.clone();
+
+                // Enable all options in the new row
+                newRow.find("select.product option").prop("disabled", false);
+
+                
+
+                // Check if there are selectable options in the new row
+                var selectableOptions = newRow.find("select.product option:not(:disabled)");
+                if (selectableOptions.length > 0) {
+                    // Append the new row to the productRows div
+                    $("#productRows").append(newRow);
+                }
+
+                // Update the remove button event handler
+                updateRemoveButton();
+            }
+
+            // Function to remove the last added product row
+            function removeLastProductRow() {
+                // Remove the last product row
+                $(".productRow:last").remove();
+
+                // Update the remove button event handler
+                updateRemoveButton();
+            }
+
+            // Function to update the remove button event handler
+            function updateRemoveButton() {
+                // Disable remove button if there is only one product row
+                if ($(".productRow").length === 1) {
+                    $("button:contains('Remove Last Product')").prop("disabled", true);
+                } else {
+                    $("button:contains('Remove Last Product')").prop("disabled", false);
+                }
+            }
+
+            // Function to disable selected options in other rows
+            function disableSelectedOptions(select) {
+                var selectedValue = $(select).val();
+                $(".product").not(select).find("option[value='" + selectedValue + "']").prop("disabled", true);
+            }
+
+            // Event handler for document ready
+            $(document).ready(function () {
+                // Disable remove button initially if there is only one product row
+                updateRemoveButton();
+
+                // Event handler for add product button
+                $("button:contains('Add Product')").on("click", function () {
+                    addProductRow();
+                });
+
+                // Event handler for remove product button
+                $("button:contains('Remove Last Product')").on("click", function () {
+                    removeLastProductRow();
+                });
+
+                // Event handler for product selection change
+                $(document).on("change", ".product", function () {
+                    disableSelectedOptions(this);
+                });
+            });
+        </script>
+
+    </div>
+
+
+
+{% endblock %}
