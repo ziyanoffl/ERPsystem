@@ -70,6 +70,16 @@ class CreateProductionOrderView(View):
         print("quantity:", quantity)
         print("warehouse_id:", warehouse_id)
 
+        # Validate if required fields are present
+        if not (product_id and quantity and warehouse_id):
+            return JsonResponse({'success': False, 'message': 'Incomplete form data.'})
+
+        # Validate if quantity is a valid integer
+        try:
+            quantity = int(quantity)
+        except ValueError:
+            return JsonResponse({'success': False, 'message': 'Invalid quantity value.'})
+
         # Check if there are enough raw materials
         if not self.has_enough_raw_materials(product_id, quantity, warehouse_id):
             return JsonResponse({'success': False, 'message': 'Not enough raw materials. Production order canceled.'})

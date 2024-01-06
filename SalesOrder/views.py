@@ -1,13 +1,13 @@
 # views.py
 from django.contrib import messages
 from django.db import transaction
-from django.db.models import Sum
-from django.shortcuts import render, redirect
+from django.http import JsonResponse
+from django.shortcuts import render, redirect, get_object_or_404
 
-from Inventory.models import ProductInventory, Warehouse
+from Inventory.models import ProductInventory
 from Production.models import Product
 from .forms import SalesOrderForm
-from .models import SalesOrderItem
+from .models import SalesOrderItem, SalesOrder
 
 
 def add_sales_order(request):
@@ -33,7 +33,8 @@ def add_sales_order(request):
                         # Check if there is sufficient quantity in the inventory
                         product_inventory = ProductInventory.objects.get(product=product)
                         if int(quantity) > product_inventory.quantity_on_hand:
-                            messages.error(request, f"Insufficient quantity for product {product.product_name}. Order cancelled.")
+                            messages.error(request,
+                                           f"Insufficient quantity for product {product.product_name}. Order cancelled.")
                             cancel_order = True
                             break
 
@@ -59,7 +60,7 @@ def add_sales_order(request):
                 messages.error(request, f"An error occurred: {str(e)}")
                 return redirect('error_page')  # Redirect to an error page
 
-            return redirect('success_page')  # Redirect to a success page after processing
+            return redirect('product_inventory')  # Redirect to a success page after processing
 
     else:
         form = SalesOrderForm()
@@ -67,3 +68,28 @@ def add_sales_order(request):
         context = {'form': form, 'products': products}
 
     return render(request, 'Sales Management/add_sales_order.html', context)
+
+
+def sales_order_view(request):
+    # Retrieve sales orders data from the database
+    sales_orders = SalesOrder.objects.all()
+
+    # Render the HTML template with the sales orders data
+    return render(request, 'Sales Management/view_sales_orders.html', {'sales_orders': sales_orders})
+
+
+def update_order_status(request, order_id):
+    if request.method == 'POST':
+        new_status = request.POST.get('status')
+
+        # Get the SalesOrder instance or return a 404 response if not found
+        order = get_object_or_404(SalesOrder, id=order_id)
+
+        # Update the order status
+        order.status = new_status
+        order.save()
+
+        # Redirect back to the sales order view
+        return redirect('sales_order')
+    else:
+        return JsonResponse({'success': False})

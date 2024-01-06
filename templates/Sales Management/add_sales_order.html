@@ -15,28 +15,37 @@
             {% csrf_token %}
             {{ form.as_p }}
 
+        <h3>Add Products</h3>
             <div id="productRows">
                 <!-- Initial product row -->
                 <div class="productRow">
-                    <label for="product[]">Product:</label>
-                    <select name="product[]" class="product" onchange="disableSelectedOptions(this)">
-                        <!-- Add options for products -->
-                        {% for product in products %}
-                            <option value="{{ product.product_id }}">{{ product.product_name }}</option>
-                        {% endfor %}
-                    </select>
+                    <div class="row">
+                        <!-- Other fields for sales order item -->
+                        <div class="col-3 mb-4">
+                            <label for="product[]">Product:</label>
+                            <select name="product[]" class="product form-select"
+                                    onchange="disableSelectedOptions(this)">
+                                <!-- Add options for products -->
+                                {% for product in products %}
+                                    <option value="{{ product.product_id }}">{{ product.product_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
 
-                    <!-- Other fields for sales order item -->
-                    <label for="product_quantity[]">Quantity:</label>
-                    <input type="number" name="product_quantity[]" class="quantity">
+                        <div class="col-3">
+                            <label for="product_quantity[]">Quantity:</label>
+                            <input type="number" name="product_quantity[]" class="quantity form-control">
+                        </div>
+                    </div>
+
 
                     <!-- Add other fields for sales order item (unit_price, total_price, etc.) -->
                 </div>
             </div>
 
-            <button type="button" onclick="addProductRow()">Add Product</button>
-            <button type="button" onclick="removeLastProductRow()">Remove Last Product</button>
-            <input type="submit" value="Save">
+            <button type="button" class="btn btn-secondary" onclick="addProductRow()">Add Product</button>
+            <button type="button" class="btn btn-danger" onclick="removeLastProductRow()">Remove Last Product</button>
+            <input type="submit" class="btn-primary btn" value="Save">
         </form>
 
         <script>
@@ -49,7 +58,6 @@
                 // Enable all options in the new row
                 newRow.find("select.product option").prop("disabled", false);
 
-                
 
                 // Check if there are selectable options in the new row
                 var selectableOptions = newRow.find("select.product option:not(:disabled)");

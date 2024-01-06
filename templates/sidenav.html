@@ -94,7 +94,8 @@
                             <a href="#" class="sidebar-link">View Production Orders</a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="{% url 'create_production_order' %}" class="sidebar-link">Add new Production Order</a>
+                            <a href="{% url 'create_production_order' %}" class="sidebar-link">Add new Production
+                                Order</a>
                         </li>
                     </ul>
                 </li>
@@ -116,7 +117,7 @@
                             data-bs-parent="#sidebar"
                     >
                         <li class="sidebar-item">
-                            <a href="#" class="sidebar-link">View Sales orders</a>
+                            <a href="{% url 'sales_order' %}" class="sidebar-link">View Sales Orders</a>
                         </li>
                         <li class="sidebar-item">
                             <a href="{% url 'add_sales_order' %}" class="sidebar-link">Add new Sales order</a>
@@ -144,10 +145,14 @@
                             <a href="{% url 'raw_material_view' %}" class="sidebar-link">View/Add Raw materials</a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="{% url 'raw_material_inventory_list' %}" class="sidebar-link">View Available Raw Materials</a>
+                            <a href="{% url 'warehouse_management_view' %}" class="sidebar-link">View/Add Warehouses</a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="{% url 'warehouse_management_view' %}" class="sidebar-link">View/Add Warehouses</a>
+                            <a href="{% url 'raw_material_inventory_list' %}" class="sidebar-link">View Available Raw
+                                Materials</a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="{% url 'product_inventory' %}" class="sidebar-link">View Available Products</a>
                         </li>
                     </ul>
                 </li>
@@ -232,7 +237,7 @@
                         <div class="dropdown-menu dropdown-menu-end">
                             <a href="" class="dropdown-item">Profile</a>
                             {% if user.is_superuser %}
-                                <a href="admin" class="dropdown-item">Superuser Site</a>
+                                <a href="{% url 'admin:index' %}" class="dropdown-item">Superuser Site</a>
                             {% endif %}
                             <a href="#" class="dropdown-item">Setting</a>
                             <a href="{% url 'logout' %}" class="dropdown-item">Logout</a>
@@ -270,39 +275,7 @@
         src="https://kit.fontawesome.com/f8e5997ee4.js"
         crossorigin="anonymous"
 ></script>
-<script>
-    // theme toggle
 
-    {#document.querySelector(".theme-toggle").addEventListener("click", () => {#}
-    {#    toggleLocalStorage();#}
-    {#    toggleRootClass();#}
-    {#})
-        ;
-        #}
-        {##}
-        {#function toggleRootClass() {#}
-        {#    const current = document.documentElement.getAttribute("data-bs-theme");#}
-        {#    const inverted = current === "dark" ? "light" : "dark";#}
-        {#    document.documentElement.setAttribute("data-bs-theme", inverted);#}
-        {#}#}
-            {##}
-            {#function toggleLocalStorage() {#}
-            {#    if (isLight()) {#}
-            {#        localStorage.removeItem("light");#}
-            {#    } else {#}
-            {#        localStorage.setItem("light", "set");#}
-            {#    }#}
-            {#}#}
-                {##}
-                {#function isLight() {#}
-                {#    return localStorage.getItem("light");#}
-                {#}#}
-                    {##}
-                    {#if (isLight()) {#}
-                    {#    toggleRootClass();#}
-                    {
-    #}#}
-</script>
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>

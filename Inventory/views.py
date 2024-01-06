@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 
 from .forms import WarehouseForm, RawMaterialForm
-from .models import Warehouse, RawMaterial, RawMaterialInventory
+from .models import Warehouse, RawMaterial, RawMaterialInventory, ProductInventory
 
 
 # Warehouse Management
@@ -92,3 +92,11 @@ def create_product(request):
         form = RawMaterialForm()
     context = {'form': form}
     return render(request, 'inventory/raw_materials.html', context)
+
+
+def product_inventory_view(request):
+    # Retrieve product inventory data from the database
+    product_inventory = ProductInventory.objects.all()
+
+    # Render the HTML template with the product inventory data
+    return render(request, 'inventory/view_available_products.html', {'product_inventory': product_inventory})
