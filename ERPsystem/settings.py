@@ -37,6 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'Production',
+    'Inventory',
+    'CRM',
+    'PurchaseOrder',
+    'SalesOrder',
 ]
 
 MIDDLEWARE = [
@@ -48,6 +53,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
+SESSION_SAVE_EVERY_REQUEST = True
 
 ROOT_URLCONF = 'ERPsystem.urls'
 
@@ -76,8 +83,12 @@ WSGI_APPLICATION = 'ERPsystem.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'erp_system',
+        'USER': 'root',
+        'PASSWORD': '123456789',
+        'HOST': 'localhost',   # Set to the MySQL server host. Use 'localhost' if the server is on the same machine.
+        'PORT': '3306',        # Set to the MySQL server port.
     }
 }
 

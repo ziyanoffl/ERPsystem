@@ -1,0 +1,48 @@
+{% extends 'sidenav.html' %}
+{% block title %}Production Management{% endblock %}
+{% block content %}
+    <div class="mb-3">
+
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Production Management</a></li>
+            <li class="breadcrumb-item" aria-current="page"><a href="{% url 'product_info_view' %}">View Products</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Add Product</li>
+        </ol>
+    </div>
+
+
+    <div class="row">
+        <form method="post" action="{% url 'create_production_order' %}">
+            {% csrf_token %}
+
+            <div class="col-md-3 mb-3">
+                <label for="product_id" class="form-label">Select Product:</label>
+                <select name="product_id" class="form-control" required>
+                    {% for product in products %}
+                        <option value="{{ product.product_id }}">{{ product.product_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3 mb-3">
+                <label for="quantity" class="form-label">Quantity:</label>
+                <input type="number" class="form-control" name="quantity" required>
+
+
+            </div>
+            <div class="col-md-3 mb-3">
+                <label for="warehouse" class="form-label">Select Warehouse:</label>
+                <select name="warehouse" class="form-select" required>
+                    {% for warehouse in warehouses %}
+                        <option value="{{ warehouse.warehouse_id }}">{{ warehouse.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+
+            <button type="submit" class="btn btn-primary">Create Production Order</button>
+        </form>
+    </div>
+
+
+
+{% endblock %}

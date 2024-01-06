@@ -1,0 +1,84 @@
+{% extends 'sidenav.html' %}
+{% block title %}Inventory Management{% endblock %}
+{% block content %}
+    <div class="mb-3">
+
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Sales Management</a></li>
+            <li class="breadcrumb-item active" aria-current="page">View Sales Orders</li>
+        </ol>
+    </div>
+
+    <div class="mb-3">
+
+        <h4 class="mt-5">Sales Orders</h4>
+        <div class="row">
+            <div class="col-12">
+                <table id="example" class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Customer</th>
+                        <th>Order Date</th>
+                        <th>Ship Date</th>
+                        <th>Status</th>
+                        <th>Total Price</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for order in sales_orders %}
+                        <tr>
+                            <td>{{ order.customer }}</td>
+                            <td>{{ order.order_date }}</td>
+                            <td>{{ order.ship_date }}</td>
+                            <td width="15%">
+                                <select class="status-dropdown form-select form-select-sm" data-order-id="{{ order.id }}">
+                                    <option value="pending" {% if order.status == 'pending' %}selected{% endif %}>
+                                        Pending
+                                    </option>
+                                    <option value="shipped" {% if order.status == 'shipped' %}selected{% endif %}>
+                                        Shipped
+                                    </option>
+                                </select>
+                            </td>
+                            <td>{{ order.total_price }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.status-dropdown').change(function () {
+                var orderId = $(this).data('order-id');
+                var newStatus = $(this).val();
+
+                // Use AJAX to update the status in the backend
+                $.ajax({
+                    url: '/update_order_status/' + orderId + '/',
+                    type: 'POST',
+                    data: {
+                        'status': newStatus,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function () {
+                        // Optionally, you can update the table row without reloading the page
+                        // For simplicity, you can reload the entire page
+                        location.reload();
+                    },
+                    error: function (xhr, errmsg, err) {
+                        console.log(err);
+                    }
+                });
+            });
+        });
+    </script>
+
+
+{% endblock %}

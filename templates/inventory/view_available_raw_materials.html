@@ -1,0 +1,49 @@
+{% extends 'sidenav.html' %}
+{% block title %}Inventory Management{% endblock %}
+{% block content %}
+    <div class="mb-3">
+
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Inventory Management</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Raw Materials</li>
+        </ol>
+    </div>
+
+    <div class="mb-3">
+
+        <h4 class="mt-5">Raw Materials Inventory</h4>
+        <div class="row">
+            <div class="col-12">
+                <table id="example" class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Raw Material</th>
+                        <th>Warehouse</th>
+                        <th>Quantity on Hand</th>
+                        <th>Last Updated</th>
+                        <th>Unit Cost</th>
+                        <th>Total Cost</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for inventory_item in raw_material_inventory_list %}
+                        <tr>
+                            <td>{{ inventory_item.raw_material }}</td>
+                            <td>{{ inventory_item.warehouse.name }}</td>
+                            <td>{{ inventory_item.quantity_on_hand }}</td>
+                            <td>{{ inventory_item.last_updated }}</td>
+                            <td>{{ inventory_item.unit_cost }}</td>
+                            <td>{{ inventory_item.total_cost }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+{% endblock %}
