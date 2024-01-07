@@ -1,17 +1,61 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
+import openai
 from django.contrib import messages
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
+from django.http import JsonResponse
+from django.shortcuts import render, redirect
+from django.db import models
+
+from Inventory.models import RawMaterial, Warehouse, ProductInventory, RawMaterialInventory
+from Production.models import Product, ProductionOrder
+from PurchaseOrder.models import PurchaseOrder
+from SalesOrder.models import SalesOrder, SalesOrderItem
 
 
 @login_required(login_url='login_view')
 def home_view(request):
+    # Retrieve data for charts and table
+    raw_materials = RawMaterial.objects.all()
+    warehouses = Warehouse.objects.all()
+    production_orders = ProductionOrder.objects.all()
+
     # Check for the custom context variable indicating a successful login
     login_success = request.session.pop('login_success', False)
     # Print a message to the console
     print(f'login_success value: {login_success}')
-    return render(request, 'dashboard.html', {'login_success': login_success})
+
+    # Data for Raw Material Inventory Chart
+    raw_material_labels = [str(material) for material in RawMaterialInventory.objects.all()]
+    raw_material_data = [inventory.quantity_on_hand for inventory in RawMaterialInventory.objects.all()]
+
+    # Data for Product Inventory Chart
+    product_labels = [str(product) for product in ProductInventory.objects.all()]
+    product_data = [inventory.quantity_on_hand for inventory in ProductInventory.objects.all()]
+
+    # Data for Production Orders Chart
+    production_order_labels = [str(order.product) for order in ProductionOrder.objects.all()]
+    production_order_data = [order.quantity for order in ProductionOrder.objects.all()]
+
+    # Data for Purchase Orders Chart
+    purchase_order_labels = [str(order.raw_material) for order in PurchaseOrder.objects.all()]
+    purchase_order_data = [order.quantity for order in PurchaseOrder.objects.all()]
+
+    return render(
+        request,
+        'dashboard.html',
+        {
+            'login_success': login_success,
+            'raw_material_labels': raw_material_labels,
+            'raw_material_data': raw_material_data,
+            'product_labels': product_labels,
+            'product_data': product_data,
+            'production_order_labels': production_order_labels,
+            'production_order_data': production_order_data,
+            'purchase_order_labels': purchase_order_labels,
+            'purchase_order_data': purchase_order_data,
+        }
+    )
 
 
 def login_view(request):
@@ -62,3 +106,48 @@ def signup_view(request):
         form = UserCreationForm()
 
     return render(request, 'accounts/signup.html', {'form': form})
+
+
+# Open AI key responses
+def generate_openai_response(request):
+    # Fetch the last 10 rows from your database based on the timestamp field
+    data_from_database = Product.objects.order_by('-product_id')[:10]
+
+    # Extract column names
+    column_names = [field.name for field in Product._meta.fields]
+
+    # Extract relevant data from the database
+    rows_as_csv = []
+
+    # Add column names to the CSV data
+    rows_as_csv.append(','.join(column_names))
+
+    for product in data_from_database:
+        # Assuming all fields in the model are relevant
+        row_values = [str(getattr(product, field.name)) for field in product._meta.fields]
+        rows_as_csv.append(','.join(row_values))
+
+    openai.api_key = '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'
+
+    # Create a prompt incorporating the database content
+    prompt = f"Analyze the following data and provide brief insights: {', '.join(rows_as_csv)}"
+
+    response = openai.chat.completions.create(
+        messages=[
+            {
+                "role": "user",
+                "content": prompt,
+            }
+        ],
+        model="gpt-3.5-turbo",
+        # model="gpt-4-1106-preview",
+    )
+
+    response_message = response.choices[0].message.content
+    print(response_message)
+
+    return JsonResponse({'generated_response': response_message})
+
+
+def ai_analysis_view(request):
+    return render(request, 'AI Analysis/analysis_page.html')

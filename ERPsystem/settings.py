@@ -15,7 +15,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -26,7 +25,6 @@ SECRET_KEY = 'django-insecure-^!+b-i-si6ape9v8*+c*nvbn^s#usv(+m&(6@v(5ih+93mpmu@
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -42,6 +40,7 @@ INSTALLED_APPS = [
     'CRM',
     'PurchaseOrder',
     'SalesOrder',
+    'chartjs',
 ]
 
 MIDDLEWARE = [
@@ -77,7 +76,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ERPsystem.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
@@ -87,11 +85,10 @@ DATABASES = {
         'NAME': 'erp_system',
         'USER': 'root',
         'PASSWORD': '123456789',
-        'HOST': 'localhost',   # Set to the MySQL server host. Use 'localhost' if the server is on the same machine.
-        'PORT': '3306',        # Set to the MySQL server port.
+        'HOST': 'localhost',  # Set to the MySQL server host. Use 'localhost' if the server is on the same machine.
+        'PORT': '3306',  # Set to the MySQL server port.
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -111,7 +108,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
@@ -122,7 +118,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/

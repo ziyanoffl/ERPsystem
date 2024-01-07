@@ -12,7 +12,7 @@ class RawMaterial(models.Model):
     cost = models.DecimalField(max_digits=12, decimal_places=2, default=0.0)
 
     def __str__(self):
-        return f"{self.material_name} - {self.description}"
+        return f"{self.material_name}"
 
     class Meta:
         db_table = 'raw_material'
@@ -38,6 +38,9 @@ class RawMaterialInventory(models.Model):
     unit_cost = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
     total_cost = models.DecimalField(max_digits=12, decimal_places=2, default=0.0)
 
+    def __str__(self):
+        return self.raw_material.material_name
+
     class Meta:
         db_table = 'raw_material_inventory'
 
@@ -58,5 +61,7 @@ class ProductInventory(models.Model):
     quantity_on_hand = models.IntegerField()
     last_updated = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return self.product.product_name
     class Meta:
         db_table = 'product_inventory'

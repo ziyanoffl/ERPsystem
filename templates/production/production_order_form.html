@@ -5,7 +5,8 @@
 
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="#">Production Management</a></li>
-            <li class="breadcrumb-item" aria-current="page"><a href="{% url 'product_info_view' %}">View Products</a></li>
+            <li class="breadcrumb-item" aria-current="page"><a href="{% url 'product_info_view' %}">View Products</a>
+            </li>
             <li class="breadcrumb-item active" aria-current="page">Add Product</li>
         </ol>
     </div>
@@ -26,8 +27,10 @@
             <div class="col-md-3 mb-3">
                 <label for="quantity" class="form-label">Quantity:</label>
                 <input type="number" class="form-control" name="quantity" required>
-
-
+            </div>
+            <div class="col-md-3 mb-3">
+                <label for="end_date" class="form-label">End date:</label>
+                <input type="date" class="form-control" name="end_date" required>
             </div>
             <div class="col-md-3 mb-3">
                 <label for="warehouse" class="form-label">Select Warehouse:</label>

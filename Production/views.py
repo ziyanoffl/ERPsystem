@@ -64,6 +64,7 @@ class CreateProductionOrderView(View):
     def post(self, request, *args, **kwargs):
         product_id = request.POST.get('product_id')
         quantity = int(request.POST.get('quantity'))
+        end_date = str(request.POST.get('end_date'))
         warehouse_id = int(request.POST.get('warehouse'))
 
         print("product_id:", product_id)
@@ -89,9 +90,8 @@ class CreateProductionOrderView(View):
             production_order = ProductionOrder.objects.create(
                 product_id=product_id,
                 quantity=quantity,
-                order_date=timezone.now(),
                 start_date=timezone.now(),
-                end_date=timezone.now() + timedelta(days=7),  # Adjust as needed
+                end_date=end_date,  # Adjust as needed
             )
 
             # Update ProductInventory
@@ -109,8 +109,6 @@ class CreateProductionOrderView(View):
                                                                     quantity_on_hand=0)
                 product_inventory.quantity_on_hand += quantity
                 product_inventory.save()
-
-
 
             # Reduce RawMaterialInventory
             raw_materials = ProductRawMaterial.objects.filter(product=product)
@@ -133,13 +131,14 @@ class CreateProductionOrderView(View):
 
                 if raw_material_inventory.quantity_on_hand < required_quantity:
                     production_order.delete()  # Cancel the production order
-                    return JsonResponse({'success': False, 'message': 'Not enough raw materials. Production order canceled.'})
+                    return JsonResponse(
+                        {'success': False, 'message': 'Not enough raw materials. Production order canceled.'})
 
                 raw_material_inventory.quantity_on_hand -= required_quantity
                 raw_material_inventory.total_cost -= (required_quantity * raw_material_inventory.unit_cost)
                 raw_material_inventory.save()
 
-        return JsonResponse({'success': True, 'message': 'Production order created successfully.'})
+        return redirect('production_order_list')
 
     def has_enough_raw_materials(self, product_id, quantity, warehouse_id):
         product = get_object_or_404(Product, pk=product_id)
@@ -170,3 +169,8 @@ class CreateProductionOrderView(View):
                 return False  # Not enough raw materials
 
         return True  # Enough raw materials
+
+
+def production_order_list(request):
+    orders = ProductionOrder.objects.all()
+    return render(request, 'production/production_order_list.html', {'orders': orders})
