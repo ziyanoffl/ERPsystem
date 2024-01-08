@@ -5,12 +5,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
-from django.db import models
 
+from ERPsystem.settings import OPENAI_API_KEY
 from Inventory.models import RawMaterial, Warehouse, ProductInventory, RawMaterialInventory
 from Production.models import Product, ProductionOrder
 from PurchaseOrder.models import PurchaseOrder
-from SalesOrder.models import SalesOrder, SalesOrderItem
 
 
 @login_required(login_url='login_view')
@@ -127,7 +126,7 @@ def generate_openai_response(request):
         row_values = [str(getattr(product, field.name)) for field in product._meta.fields]
         rows_as_csv.append(','.join(row_values))
 
-    openai.api_key = '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'
+    openai.api_key = OPENAI_API_KEY
 
     # Create a prompt incorporating the database content
     prompt = f"Analyze the following data and provide brief insights: {', '.join(rows_as_csv)}"
