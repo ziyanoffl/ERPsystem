@@ -1,0 +1,47 @@
+{% extends 'sidenav.html' %}
+{% block title %}AI Analysis{% endblock %}
+{% block content %}
+
+    <div class="mb-3">
+
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">AI Analysis</a></li>
+            <li class="breadcrumb-item active" aria-current="page">AI Chatbot</li>
+        </ol>
+    </div>
+
+    <button id="generateOpenAIResponseBtn" class="btn btn-primary">Generate Intelligent Analysis Products
+    </button>
+    <pre>
+        <code>
+            <div id="responseContainer">
+                <!-- The generated response will be displayed here -->
+            </div>
+
+        </code>
+    </pre>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Handle button click
+            $("#generateOpenAIResponseBtn").click(function () {
+                // Make AJAX request to the generate_openai_response endpoint
+                $.ajax({
+                    url: '/generate_openai_response/',
+                    type: 'GET',
+                    success: function (response) {
+                        // Display the generated response in the response container
+                        $("#responseContainer").html(response.generated_response);
+                    },
+                    error: function (error) {
+                        console.error('Error:', error);
+                    }
+                });
+            });
+        });
+    </script>
+
+
+{% endblock %}

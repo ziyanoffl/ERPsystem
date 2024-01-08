@@ -1,0 +1,38 @@
+{% extends 'sidenav.html' %}
+{% block title %}Products{% endblock %}
+{% block content %}
+    <div class="mb-3">
+
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Production Management</a></li>
+            <li class="breadcrumb-item active" aria-current="page">View Products</li>
+        </ol>
+    </div>
+
+    <div class="mb-3">
+        <h2>Production Order list</h2>
+        <table id="example" class="table table-striped">
+            <thead>
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for order in orders %}
+                <tr>
+                    <td>{{ order.product }}</td>
+                    <td>{{ order.quantity }}</td>
+                    <td>{{ order.start_date }}</td>
+                    <td>{{ order.end_date }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
+
+{% endblock %}

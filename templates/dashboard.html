@@ -30,72 +30,123 @@
         <h4>Welcome, {{ user.username }}</h4>
     </div>
 
-    <div class="row">
-        <div class="col-md-3">
-            <div class="card mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">New Customers</h5>
-                    <p class="card-text">
-                        <span id="totalUsers">{{ totalUsers }}+</span>
-                    </p>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-6">
+                <!-- Raw Material Inventory Chart -->
+                <div>
+                    <h3>Raw Material Inventory</h3>
+                    <canvas id="rawMaterialChart"></canvas>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <!-- Product Inventory Chart -->
+                <div>
+                    <h3>Product Inventory</h3>
+                    <canvas id="productInventoryChart"></canvas>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-3">
-            <div class="card mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">Purchase Orders</h5>
-                    <p class="card-text">
-                        <span id="totalRevenue">{{ totalRevenue }}</span>
-                    </p>
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <!-- Production Orders Chart -->
+                <div>
+                    <h3>Production Orders</h3>
+                    <canvas id="productionOrdersChart"></canvas>
                 </div>
             </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="card mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">New customers</h5>
-                    <p class="card-text">
-                        <span id="">5</span>
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Sales Chart</h5>
-                    <canvas id="salesChart" width="400" height="200"></canvas>
+            <div class="col-md-6">
+                <!-- Purchase Orders Chart -->
+                <div>
+                    <h3>Purchase Orders</h3>
+                    <canvas id="purchaseOrdersChart"></canvas>
                 </div>
             </div>
         </div>
     </div>
-
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Mock data
-        var totalUsers = Math.floor(Math.random() * 1000) + 500;
-        var totalRevenue = Math.floor(Math.random() * 100000) + 50000;
-
-        document.getElementById('totalUsers').innerText = totalUsers;
-        document.getElementById('totalRevenue').innerText = totalRevenue;
-
-        // Chart.js
-        var ctx = document.getElementById('salesChart').getContext('2d');
-        var salesChart = new Chart(ctx, {
+        // Raw Material Inventory Chart
+        var rawMaterialChartCtx = document.getElementById('rawMaterialChart').getContext('2d');
+        var rawMaterialChart = new Chart(rawMaterialChartCtx, {
             type: 'bar',
             data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                labels: {{ raw_material_labels|safe }},
                 datasets: [{
-                    label: 'Monthly Sales',
-                    data: [120, 150, 200, 180, 250, 220],
+                    label: 'Quantity on Hand',
+                    data: {{ raw_material_data|safe }},
                     backgroundColor: 'rgba(75, 192, 192, 0.2)',
                     borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Product Inventory Chart
+        var productInventoryChartCtx = document.getElementById('productInventoryChart').getContext('2d');
+        var productInventoryChart = new Chart(productInventoryChartCtx, {
+            type: 'bar',
+            data: {
+                labels: {{ product_labels|safe }},
+                datasets: [{
+                    label: 'Quantity on Hand',
+                    data: {{ product_data|safe }},
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Production Orders Chart
+        var productionOrdersChartCtx = document.getElementById('productionOrdersChart').getContext('2d');
+        var productionOrdersChart = new Chart(productionOrdersChartCtx, {
+            type: 'bar',
+            data: {
+                labels: {{ production_order_labels|safe }},
+                datasets: [{
+                    label: 'Quantity',
+                    data: {{ production_order_data|safe }},
+                    backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                    borderColor: 'rgba(255, 206, 86, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Purchase Orders Chart
+        var purchaseOrdersChartCtx = document.getElementById('purchaseOrdersChart').getContext('2d');
+        var purchaseOrdersChart = new Chart(purchaseOrdersChartCtx, {
+            type: 'line',
+            data: {
+                labels: {{ purchase_order_labels|safe }},
+                datasets: [{
+                    label: 'Quantity',
+                    data: {{ purchase_order_data|safe }},
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
                     borderWidth: 1
                 }]
             },

@@ -19,10 +19,10 @@ from django.contrib.auth.views import LogoutView
 from django.urls import path
 
 from CRM.views import customer_management_view, customer_update, supplier_management_view, supplier_update
-from ERPsystem.views import home_view, login_view, signup_view, custom_login
+from ERPsystem.views import home_view, login_view, signup_view, custom_login, generate_openai_response, ai_analysis_view
 from Inventory.views import warehouse_management_view, warehouse_update, warehouse_delete, raw_material_view, \
     raw_material_update, raw_material_inventory_list, product_inventory_view
-from Production.views import product_info_view, create_product, CreateProductionOrderView
+from Production.views import product_info_view, create_product, CreateProductionOrderView, production_order_list
 from PurchaseOrder.views import create_purchase_order, purchase_order_list
 from SalesOrder.views import add_sales_order, sales_order_view, update_order_status
 
@@ -42,6 +42,7 @@ urlpatterns = [
     path('product', product_info_view, name='product_info_view'),
     path('add-product', create_product, name='create_product'),
     path('create_production_order/', CreateProductionOrderView.as_view(), name='create_production_order'),
+    path('production-orders/', production_order_list, name='production_order_list'),
 
     # Inventory section ######################################
     path('warehouse', warehouse_management_view, name='warehouse_management_view'),
@@ -69,4 +70,8 @@ urlpatterns = [
     path('sales-orders/', sales_order_view, name='sales_order'),
     path('update_order_status/<int:order_id>/', update_order_status, name='update_order_status'),
     # path('custom-signup/', custom_signup, name='custom_signup'),
+
+    # AI
+    path('ai_analysis/', ai_analysis_view, name='ai_analysis_view'),
+    path('generate_openai_response/', generate_openai_response, name='generate_openai_response'),
 ]

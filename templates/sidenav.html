@@ -91,7 +91,7 @@
                             <a href="{% url 'create_product' %}" class="sidebar-link">Add new Product</a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="#" class="sidebar-link">View Production Orders</a>
+                            <a href="{% url 'production_order_list' %}" class="sidebar-link">View Production Orders</a>
                         </li>
                         <li class="sidebar-item">
                             <a href="{% url 'create_production_order' %}" class="sidebar-link">Add new Production
@@ -194,7 +194,7 @@
                             aria-expanded="false"
                     >
                         <i class="fas fa-chart-bar pe-2"></i>
-                        Reporting and Analytics
+                        AI Analysis
                     </a>
                     <ul
                             id="report"
@@ -202,10 +202,7 @@
                             data-bs-parent="#sidebar"
                     >
                         <li class="sidebar-item">
-                            <a href="#" class="sidebar-link">1</a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="#" class="sidebar-link">2</a>
+                            <a href="{% url 'ai_analysis_view' %}" class="sidebar-link">AI Chatbot</a>
                         </li>
                     </ul>
                 </li>
