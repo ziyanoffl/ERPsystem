@@ -108,20 +108,32 @@ def signup_view(request):
 
 
 # Open AI key responses
-def generate_openai_response(request):
-    # Fetch the last 10 rows from your database based on the timestamp field
-    data_from_database = Product.objects.order_by('-product_id')[:10]
-
-    # Extract column names
-    column_names = [field.name for field in Product._meta.fields]
+def generate_openai_response(request, table_type):
+    # Choose the appropriate model based on the table_type parameter
+    if table_type == 'product':
+        model_data = Product.objects.order_by('-product_id')[:10]
+    elif table_type == 'other':
+        model_data = ProductInventory.objects.order_by('-id')[:10]
+    elif table_type == 'recent_purchases':
+        model_data = PurchaseOrder.objects.order_by('-order_id')[:10]
+    else:
+        return JsonResponse({'error': 'Invalid table_type'})
 
     # Extract relevant data from the database
-    rows_as_csv = []
+    table_name = model_data.model._meta.db_table  # Get the actual table name
+    column_names = [field.name for field in model_data.model._meta.fields]
+
+    # Build the CSV header
+    rows_as_csv = [','.join([table_name] + column_names)]  # Add table name as a header
+
+    # Build CSV rows
+    for product in model_data:
+        row_values = [str(getattr(product, field.name)) for field in product._meta.fields]
+        rows_as_csv.append(','.join(row_values))
 
     # Add column names to the CSV data
-    rows_as_csv.append(','.join(column_names))
 
-    for product in data_from_database:
+    for product in model_data:
         # Assuming all fields in the model are relevant
         row_values = [str(getattr(product, field.name)) for field in product._meta.fields]
         rows_as_csv.append(','.join(row_values))
@@ -133,10 +145,9 @@ def generate_openai_response(request):
 
     response = openai.chat.completions.create(
         messages=[
-            {
-                "role": "user",
-                "content": prompt,
-            }
+            {"role": "system", "content": "You are an intelligent AI integrated within an ERP system to provide insights and trends in data and be helpful. "
+                                          "I'll send you some database data, you should act your role and give short and very very brief insights or trends"},
+            {"role": "user", "content": prompt},
         ],
         model="gpt-3.5-turbo",
         # model="gpt-4-1106-preview",

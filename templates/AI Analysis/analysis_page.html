@@ -10,8 +10,17 @@
         </ol>
     </div>
 
-    <button id="generateOpenAIResponseBtn" class="btn btn-primary">Generate Intelligent Analysis Products
-    </button>
+    <div class="col-3 mb-3">
+        <select id="tableTypeSelector" class="form-select">
+            <option value="product">Product Table</option>
+            <option value="recent_purchases">Recent Purchases</option>
+            <option value="other">Product Inventory</option>
+            <!-- Add more options as needed -->
+        </select>
+    </div>
+
+    <button id="generateOpenAIResponseBtn" class="btn btn-primary">Generate Intelligent Analysis Products</button>
+
     <pre>
         <code>
             <div id="responseContainer">
@@ -27,9 +36,12 @@
         $(document).ready(function () {
             // Handle button click
             $("#generateOpenAIResponseBtn").click(function () {
-                // Make AJAX request to the generate_openai_response endpoint
+                // Get the selected table type from the dropdown
+                var tableType = $("#tableTypeSelector").val();
+
+                // Make AJAX request to the generate_openai_response endpoint with the selected table type
                 $.ajax({
-                    url: '/generate_openai_response/',
+                    url: '/generate_openai_response/' + tableType + '/',
                     type: 'GET',
                     success: function (response) {
                         // Display the generated response in the response container
