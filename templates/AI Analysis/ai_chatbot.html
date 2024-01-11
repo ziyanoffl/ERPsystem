@@ -6,7 +6,7 @@
 
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="#">AI Integration Center</a></li>
-            <li class="breadcrumb-item active" aria-current="page">AI Analysis</li>
+            <li class="breadcrumb-item active" aria-current="page">AI Chatbot</li>
         </ol>
     </div>
 
@@ -19,30 +19,44 @@
         </select>
     </div>
 
-    <button id="generateOpenAIResponseBtn" class="btn btn-primary">Generate Intelligent Analysis Products</button>
+    <div class="col-3 mb-3">
+        <!-- Use textarea instead of input for user questions -->
+        <textarea id="userQuestion" class="form-control" placeholder="Enter your question..." rows="3"></textarea>
+    </div>
+
+    <button id="generateOpenAIResponseBtn" class="btn btn-primary">Generate Intelligent Analysis</button>
 
     <pre>
         <code>
             <div id="responseContainer">
                 <!-- The generated response will be displayed here -->
             </div>
-
         </code>
     </pre>
-
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script>
         $(document).ready(function () {
             // Handle button click
             $("#generateOpenAIResponseBtn").click(function () {
-                // Get the selected table type from the dropdown
+                // Get the selected table type and user question from the inputs
                 var tableType = $("#tableTypeSelector").val();
+                var userQuestion = $("#userQuestion").val();
 
-                // Make AJAX request to the generate_openai_response endpoint with the selected table type
+                // Get CSRF token from the cookie (Django sets it in a cookie named 'csrftoken')
+                var csrftoken = document.cookie.match(/csrftoken=([^ ;]+)/)[1];
+
+                // Make AJAX request to the generate_openai_response endpoint with the selected table type and user question
                 $.ajax({
-                    url: '/generate_openai_response/' + tableType + '/',
-                    type: 'GET',
+                    url: '/open_ai_chatbot/',
+                    type: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrftoken  // Include the CSRF token in the request headers
+                    },
+                    data: {
+                        tableType: tableType,
+                        userQuestion: userQuestion
+                    },
                     success: function (response) {
                         // Display the generated response in the response container
                         $("#responseContainer").html(response.generated_response);
@@ -53,7 +67,7 @@
                 });
             });
         });
-    </script>
 
+    </script>
 
 {% endblock %}

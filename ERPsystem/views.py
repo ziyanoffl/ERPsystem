@@ -145,8 +145,9 @@ def generate_openai_response(request, table_type):
 
     response = openai.chat.completions.create(
         messages=[
-            {"role": "system", "content": "You are an intelligent AI integrated within an ERP system to provide insights and trends in data and be helpful. "
-                                          "I'll send you some database data, you should act your role and give short and very very brief insights or trends"},
+            {"role": "system",
+             "content": "You are an intelligent AI integrated within an ERP system to provide insights and trends in data and be helpful. "
+                        "I'll send you some database data, you should act your role and give short and very very brief insights or trends"},
             {"role": "user", "content": prompt},
         ],
         model="gpt-3.5-turbo",
@@ -159,5 +160,71 @@ def generate_openai_response(request, table_type):
     return JsonResponse({'generated_response': response_message})
 
 
+def open_ai_chatbot(request):
+    if request.method == 'POST':
+        try:
+            # Extract data from the POST request
+            table_type = request.POST.get('tableType')
+            user_question = request.POST.get('userQuestion')
+
+            # Choose the appropriate model based on the table_type parameter
+            if table_type == 'product':
+                model_data = Product.objects.order_by('-product_id')[:10]
+            elif table_type == 'other':
+                model_data = ProductInventory.objects.order_by('-id')[:10]
+            elif table_type == 'recent_purchases':
+                model_data = PurchaseOrder.objects.order_by('-order_id')[:10]
+            else:
+                return JsonResponse({'error': 'Invalid table_type'})
+
+            # Extract relevant data from the database
+            table_name = model_data.model._meta.db_table  # Get the actual table name
+            column_names = [field.name for field in model_data.model._meta.fields]
+
+            # Build the CSV header
+            rows_as_csv = [','.join([table_name] + column_names)]  # Add table name as a header
+
+            # Build CSV rows
+            for product in model_data:
+                row_values = [str(getattr(product, field.name)) for field in product._meta.fields]
+                rows_as_csv.append(','.join(row_values))
+
+            # Add column names to the CSV data
+            for product in model_data:
+                # Assuming all fields in the model are relevant
+                row_values = [str(getattr(product, field.name)) for field in product._meta.fields]
+                rows_as_csv.append(','.join(row_values))
+
+            openai.api_key = OPENAI_API_KEY
+
+            # Create a prompt incorporating the database content and user question
+            prompt = f"This is the data: {', '.join(rows_as_csv)}\nUser Question: {user_question}"
+
+            response = openai.chat.completions.create(
+                messages=[
+                    {"role": "system",
+                     "content": "You are an intelligent AI integrated within an ERP system to provide insights and trends in data and be helpful. "
+                                "I'll send you some database data and add a question about that data, give correct and brief answers to them."},
+                    {"role": "user", "content": prompt},
+                ],
+                model="gpt-3.5-turbo",
+                # model="gpt-4-1106-preview",
+            )
+
+            response_message = response.choices[0].message.content
+            print(prompt)
+
+            return JsonResponse({'generated_response': response_message})
+        except Exception as e:
+            return JsonResponse({'error': str(e)})
+
+    else:
+        return JsonResponse({'error': 'Invalid request method'})
+
+
 def ai_analysis_view(request):
     return render(request, 'AI Analysis/analysis_page.html')
+
+
+def ai_chatbot_view(request):
+    return render(request, 'AI Analysis/ai_chatbot.html')
