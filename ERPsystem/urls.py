@@ -76,5 +76,5 @@ urlpatterns = [
     path('ai_analysis/', ai_analysis_view, name='ai_analysis_view'),
     path('ai_chatbot/', ai_chatbot_view, name='ai_chatbot_view'),
     path('open_ai_chatbot/', open_ai_chatbot, name='open_ai_chatbot'),
-    path('generate_openai_response/<str:table_type>/', generate_openai_response, name='generate_openai_response'),
+    path('generate_openai_response/', generate_openai_response, name='generate_openai_response'),
 ]

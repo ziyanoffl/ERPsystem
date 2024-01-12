@@ -1,14 +1,29 @@
 {% extends 'sidenav.html' %}
-{% block title %}AI Analysis{% endblock %}
+{% block title %}AI Chatbot{% endblock %}
 {% block content %}
 
     <div class="mb-3">
-
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="#">AI Integration Center</a></li>
             <li class="breadcrumb-item active" aria-current="page">AI Chatbot</li>
         </ol>
     </div>
+    <div class="row">
+        <div class="col-1 mb-3">
+            <label class="form-check-label">
+                <input type="radio" name="gptModel" value="gpt-3.5-turbo" checked>
+                GPT-3.5 Turbo
+            </label>
+        </div>
+        <div class="col-3 mb-3">
+            <label class="form-check-label">
+                <input type="radio" name="gptModel" value="gpt-4-1106-preview">
+                GPT-4
+            </label>
+            <!-- Add more radio buttons as needed -->
+        </div>
+    </div>
+
 
     <div class="col-3 mb-3">
         <select id="tableTypeSelector" class="form-select">
@@ -19,16 +34,24 @@
         </select>
     </div>
 
-    <div class="col-3 mb-3">
+    <div class="col-4 mb-3">
         <!-- Use textarea instead of input for user questions -->
         <textarea id="userQuestion" class="form-control" placeholder="Enter your question..." rows="3"></textarea>
     </div>
 
-    <button id="generateOpenAIResponseBtn" class="btn btn-primary">Generate Intelligent Analysis</button>
+    <div class="col-3 mb-3">
+        <button id="generateOpenAIResponseBtn" class="btn btn-primary">Ask AI</button>
+    </div>
+
+    <div class="">
+        <div id="loadingAnimation" class="spinner-border text-primary" role="status" style="display: none;">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
 
     <pre>
         <code>
-            <div id="responseContainer">
+            <div id="responseContainer" class="">
                 <!-- The generated response will be displayed here -->
             </div>
         </code>
@@ -39,12 +62,24 @@
         $(document).ready(function () {
             // Handle button click
             $("#generateOpenAIResponseBtn").click(function () {
+                // Show loading animation
+                $("#loadingAnimation").show();
+
                 // Get the selected table type and user question from the inputs
                 var tableType = $("#tableTypeSelector").val();
                 var userQuestion = $("#userQuestion").val();
+                var gptModel = $("input[name='gptModel']:checked").val();
 
                 // Get CSRF token from the cookie (Django sets it in a cookie named 'csrftoken')
                 var csrftoken = document.cookie.match(/csrftoken=([^ ;]+)/)[1];
+
+                // Check if the user question is empty
+                var isUserQuestionEmpty = !userQuestion.trim();
+
+                // Add small title for suggested questions
+                if (isUserQuestionEmpty) {
+                    $("#responseContainer").html('<h6>Suggested Questions</h6>');
+                }
 
                 // Make AJAX request to the generate_openai_response endpoint with the selected table type and user question
                 $.ajax({
@@ -55,11 +90,21 @@
                     },
                     data: {
                         tableType: tableType,
-                        userQuestion: userQuestion
+                        userQuestion: userQuestion,
+                        gptModel: gptModel
                     },
                     success: function (response) {
+                        // Hide loading animation
+                        $("#loadingAnimation").hide();
+
                         // Display the generated response in the response container
-                        $("#responseContainer").html(response.generated_response);
+                        if (isUserQuestionEmpty) {
+                            // If user question is empty, append the response after the suggested questions title
+                            $("#responseContainer").append(response.generated_response);
+                        } else {
+                            // If user question is not empty, replace the content with the response
+                            $("#responseContainer").html(response.generated_response);
+                        }
                     },
                     error: function (error) {
                         console.error('Error:', error);
