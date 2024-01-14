@@ -122,10 +122,12 @@ def generate_openai_response(request):
                 model_data = Product.objects.order_by('-product_id')[:10]
             elif table_type == 'recent_sales':
                 model_data = SalesOrder.objects.order_by('-order_date')[:10]
-            elif table_type == 'other':
+            elif table_type == 'product_inventory':
                 model_data = ProductInventory.objects.order_by('-id')[:10]
             elif table_type == 'recent_purchases':
                 model_data = PurchaseOrder.objects.order_by('-order_id')[:10]
+            elif table_type == 'raw_material_inventory':
+                model_data = RawMaterialInventory.objects.order_by('-id')[:10]
             else:
                 return JsonResponse({'error': 'Invalid table_type'})
 
@@ -187,10 +189,12 @@ def open_ai_chatbot(request):
                 model_data = Product.objects.order_by('-product_id')[:10]
             elif table_type == 'recent_sales':
                 model_data = SalesOrder.objects.order_by('-order_date')[:10]
-            elif table_type == 'other':
+            elif table_type == 'product_inventory':
                 model_data = ProductInventory.objects.order_by('-id')[:10]
             elif table_type == 'recent_purchases':
                 model_data = PurchaseOrder.objects.order_by('-order_id')[:10]
+            elif table_type == 'raw_material_inventory':
+                model_data = RawMaterialInventory.objects.order_by('-id')[:10]
             else:
                 return JsonResponse({'error': 'Invalid table_type'})
 

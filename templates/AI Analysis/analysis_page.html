@@ -10,13 +10,13 @@
         </ol>
     </div>
     <div class="row">
-        <div class="col-1 mb-3">
+        <div class="col-sm-6 col-md-2 mb-3">
             <label class="form-check-label">
                 <input type="radio" name="gptModel" value="gpt-3.5-turbo" checked>
                 GPT-3.5 Turbo
             </label>
         </div>
-        <div class="col-3 mb-3">
+        <div class="col-sm-6 col-md-2 mb-3">
             <label class="form-check-label">
                 <input type="radio" name="gptModel" value="gpt-4-1106-preview">
                 GPT-4
@@ -25,12 +25,13 @@
         </div>
     </div>
 
-    <div class="col-3 mb-3">
+    <div class="col-sm-6 col-md-2 mb-3">
         <select id="tableTypeSelector" class="form-select">
-            <option value="product">Product Table</option>
             <option value="recent_sales">Recent Sales Orders</option>
             <option value="recent_purchases">Recent Purchases</option>
-            <option value="other">Product Inventory</option>
+            <option value="product_inventory">Product Inventory</option>
+            <option value="raw_material_inventory">Raw Material Inventory</option>
+            <option value="product">Product Table</option>
             <!-- Add more options as needed -->
         </select>
     </div>
