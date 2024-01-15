@@ -19,7 +19,8 @@ from django.contrib.auth.views import LogoutView
 from django.urls import path
 
 from CRM.views import customer_management_view, customer_update, supplier_management_view, supplier_update
-from ERPsystem.views import home_view, login_view, signup_view, custom_login, generate_openai_response, ai_analysis_view
+from ERPsystem.views import home_view, login_view, signup_view, custom_login, generate_openai_response, \
+    ai_analysis_view, ai_chatbot_view, open_ai_chatbot
 from Inventory.views import warehouse_management_view, warehouse_update, warehouse_delete, raw_material_view, \
     raw_material_update, raw_material_inventory_list, product_inventory_view
 from Production.views import product_info_view, create_product, CreateProductionOrderView, production_order_list
@@ -73,5 +74,7 @@ urlpatterns = [
 
     # AI
     path('ai_analysis/', ai_analysis_view, name='ai_analysis_view'),
+    path('ai_chatbot/', ai_chatbot_view, name='ai_chatbot_view'),
+    path('open_ai_chatbot/', open_ai_chatbot, name='open_ai_chatbot'),
     path('generate_openai_response/', generate_openai_response, name='generate_openai_response'),
 ]

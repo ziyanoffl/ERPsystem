@@ -142,10 +142,10 @@
                             data-bs-parent="#sidebar"
                     >
                         <li class="sidebar-item">
-                            <a href="{% url 'raw_material_view' %}" class="sidebar-link">View/Add Raw materials</a>
+                            <a href="{% url 'raw_material_view' %}" class="sidebar-link">Manage Raw materials</a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="{% url 'warehouse_management_view' %}" class="sidebar-link">View/Add Warehouses</a>
+                            <a href="{% url 'warehouse_management_view' %}" class="sidebar-link">Manage Warehouses</a>
                         </li>
                         <li class="sidebar-item">
                             <a href="{% url 'raw_material_inventory_list' %}" class="sidebar-link">View Available Raw
@@ -193,8 +193,8 @@
                             data-bs-toggle="collapse"
                             aria-expanded="false"
                     >
-                        <i class="fas fa-chart-bar pe-2"></i>
-                        AI Analysis
+                        <i class="fas fa-rocket pe-2"></i>
+                        AI Integration Center
                     </a>
                     <ul
                             id="report"
@@ -202,7 +202,8 @@
                             data-bs-parent="#sidebar"
                     >
                         <li class="sidebar-item">
-                            <a href="{% url 'ai_analysis_view' %}" class="sidebar-link">AI Chatbot</a>
+                            <a href="{% url 'ai_analysis_view' %}" class="sidebar-link">AI Analysis</a>
+                            <a href="{% url 'ai_chatbot_view' %}" class="sidebar-link">AI Chatbot</a>
                         </li>
                     </ul>
                 </li>

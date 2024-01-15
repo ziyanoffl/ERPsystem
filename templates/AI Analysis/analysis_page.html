@@ -5,21 +5,57 @@
     <div class="mb-3">
 
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">AI Analysis</a></li>
-            <li class="breadcrumb-item active" aria-current="page">AI Chatbot</li>
+            <li class="breadcrumb-item"><a href="#">AI Integration Center</a></li>
+            <li class="breadcrumb-item active" aria-current="page">AI Analysis</li>
         </ol>
     </div>
+    <div class="row">
+        <div class="col-sm-6 col-md-2 mb-3">
+            <label class="form-check-label">
+                <input type="radio" name="gptModel" value="gpt-3.5-turbo" checked>
+                GPT-3.5 Turbo
+            </label>
+        </div>
+        <div class="col-sm-6 col-md-2 mb-3">
+            <label class="form-check-label">
+                <input type="radio" name="gptModel" value="gpt-4-1106-preview">
+                GPT-4
+            </label>
+            <!-- Add more radio buttons as needed -->
+        </div>
+    </div>
 
-    <button id="generateOpenAIResponseBtn" class="btn btn-primary">Generate Intelligent Analysis Products
-    </button>
-    <pre>
-        <code>
-            <div id="responseContainer">
-                <!-- The generated response will be displayed here -->
-            </div>
+    <div class="col-sm-6 col-md-2 mb-3">
+        <select id="tableTypeSelector" class="form-select">
+            <option value="recent_sales">Recent Sales Orders</option>
+            <option value="recent_purchases">Recent Purchases</option>
+            <option value="product_inventory">Product Inventory</option>
+            <option value="raw_material_inventory">Raw Material Inventory</option>
+            <option value="product">Product Table</option>
+            <!-- Add more options as needed -->
+        </select>
+    </div>
 
-        </code>
-    </pre>
+    <div class="mb-4">
+        <button id="generateOpenAIResponseBtn" class="btn btn-primary">Generate Analysis</button>
+    </div>
+
+    <div class="">
+        <div id="loadingAnimation" class="spinner-border text-primary" role="status" style="display: none;">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
+    <div class="mb-4">
+        <pre>
+            <code>
+                <div id="responseContainer">
+                    <!-- The generated response will be displayed here -->
+                </div>
+
+            </code>
+        </pre>
+    </div>
 
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
@@ -27,11 +63,31 @@
         $(document).ready(function () {
             // Handle button click
             $("#generateOpenAIResponseBtn").click(function () {
-                // Make AJAX request to the generate_openai_response endpoint
+                // Show loading animation
+                $("#loadingAnimation").show();
+
+                // Get the selected table type and user question from the inputs
+                var tableType = $("#tableTypeSelector").val();
+                var gptModel = $("input[name='gptModel']:checked").val();
+
+                // Get CSRF token from the cookie (Django sets it in a cookie named 'csrftoken')
+                var csrftoken = document.cookie.match(/csrftoken=([^ ;]+)/)[1];
+
+                // Make AJAX request to the generate_openai_response endpoint with the selected table type and user question
                 $.ajax({
                     url: '/generate_openai_response/',
-                    type: 'GET',
+                    type: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrftoken  // Include the CSRF token in the request headers
+                    },
+                    data: {
+                        tableType: tableType,
+                        gptModel: gptModel
+                    },
                     success: function (response) {
+                        // Hide loading animation
+                        $("#loadingAnimation").hide();
+
                         // Display the generated response in the response container
                         $("#responseContainer").html(response.generated_response);
                     },
@@ -41,6 +97,7 @@
                 });
             });
         });
+
     </script>
 
 

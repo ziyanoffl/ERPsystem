@@ -17,7 +17,6 @@
                 <th>Product Name</th>
                 <th>Description</th>
                 <th>Unit Price</th>
-                <th>Quantity in Stock</th>
                 <th>Raw Materials</th>
             </tr>
             </thead>
@@ -27,7 +26,6 @@
                     <td>{{ product.product_name }}</td>
                     <td>{{ product.description }}</td>
                     <td>{{ product.unit_price }}</td>
-                    <td>{{ product.quantity_in_stock }}</td>
                     <td>
                         {% for raw_material in product.raw_materials %}
                             {{ raw_material.raw_material.material_name }} ({{ raw_material.quantity_required }}),
