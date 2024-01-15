@@ -88,11 +88,11 @@ WSGI_APPLICATION = 'ERPsystem.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'erp_system',
-        'USER': 'root',
-        'PASSWORD': '123456789',
-        'HOST': 'localhost',  # Set to the MySQL server host. Use 'localhost' if the server is on the same machine.
-        'PORT': '3306',  # Set to the MySQL server port.
+        'NAME': os.getenv('DB_NAME', default='erp_system'),
+        'USER': os.getenv('DB_USER', default='root'),
+        'PASSWORD': os.getenv('DB_PASSWORD', default='123456789'),
+        'HOST': os.getenv('DB_HOST', default='localhost'),
+        'PORT': os.getenv('DB_PORT', default='3306'),
     }
 }
 

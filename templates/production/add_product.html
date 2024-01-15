@@ -11,8 +11,8 @@
     </div>
 
 
-    <div class="row">
-        <form method="post" class="mt-5">
+    <div class="">
+        <form method="post" class="mt-5" action="{% url 'create_product' %}">
             {% csrf_token %}
             <div class="col-4">
                 <!-- Product Fields -->
@@ -30,67 +30,69 @@
                     <label for="unit_price" class="form-label">Unit Price:</label>
                     <input type="text" name="unit_price" class="form-control" required>
                 </div>
-
-                <div class="mb-3">
-                    <label for="quantity_in_stock" class="form-label">Quantity in Stock:</label>
-                    <input type="text" name="quantity_in_stock" class="form-control" value="0" required>
-                </div>
             </div>
 
+
+            <!-- Raw Material Fields -->
             <div class="col-6">
                 <!-- Raw Material Fields -->
                 <h2>Raw Materials</h2>
-                <div id="raw-material-container" class="mb-3">
-                    <div class="raw-material-row" id="raw-material-row-template">
-                        <label class="form-label">Raw Material:</label>
-                        <select name="raw_material" class="form-select raw-material-select" required>
-                            {% for raw_material in raw_materials %}
-                                <option value="{{ raw_material.raw_material_id }}">{{ raw_material.material_name }}</option>
-                            {% endfor %}
-                        </select>
-                        <label class="form-label">Quantity Required:</label>
-                        <input type="text" name="quantity_required" class="form-control" required>
-                        <button type="button" class="btn btn-danger remove-row">Remove</button>
+                <div id="raw-material-fields">
+                    <div class="row raw-material-row">
+                        <div class="col-4">
+                            <label class="form-label">Raw Material:</label>
+                            <select name="raw_material[]" class="form-select" required>
+                                {% for raw_material in raw_materials %}
+                                    <option value="{{ raw_material.raw_material_id }}">{{ raw_material.material_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-4">
+                            <label class="form-label">Quantity Required:</label>
+                            <input type="text" name="quantity_required[]" class="form-control" required>
+                        </div>
+                        <div class="col-3 mt-4">
+                            <label class="form-label"></label>
+                            <button type="button" class="btn btn-danger remove-row">Remove</button>
+                        </div>
                     </div>
                 </div>
 
-                <button type="button" id="add-row" class="btn btn-primary">Add Raw Material</button>
-
-                <input type="submit" value="Save" class="btn btn-success">
+                <div class="mt-3">
+                    <button type="button" id="add-row" class="btn btn-primary">Add Raw Material</button>
+                    <input type="submit" value="Save" class="btn btn-success">
+                </div>
             </div>
-
-
         </form>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
     <script>
         $(document).ready(function () {
-            var rowTemplate = $('#raw-material-row-template').html();
-            var rowCount = 1;
+            // Add Raw Material row
+            $("#add-row").on("click", function () {
+                var newRow = $(".raw-material-row:first").clone();
+                newRow.find('input').val('');
+                newRow.find('select').prop('selectedIndex', 0);
+                $("#raw-material-fields").append(newRow);
+                updateRemoveButtonState();
+            });
 
-            // Add new row
-            $('#add-row').click(function () {
-                var newRow = rowTemplate.replace(/__prefix__/g, rowCount);
+            // Remove Raw Material row
+            $(document).on("click", ".remove-row", function () {
+                $(this).closest(".raw-material-row").remove();
+                updateRemoveButtonState();
+            });
 
-                // Exclude selected raw materials from previous rows
-                $('.raw-material-select').each(function () {
-                    var selectedRawMaterial = $(this).val();
-                    newRow = newRow.replace(new RegExp('<option value="' + selectedRawMaterial + '">', 'g'), '<option value="' + selectedRawMaterial + '" disabled>');
+            function updateRemoveButtonState() {
+                // Disable the "Remove" button for the first row
+                $(".remove-row").prop("disabled", function (index) {
+                    return index === 0;
                 });
+            }
 
-                $('#raw-material-container').append(newRow);
-                rowCount++;
-            });
-
-            // Remove row
-            $('#raw-material-container').on('click', '.remove-row', function () {
-                $(this).closest('.raw-material-row').remove();
-            });
+            updateRemoveButtonState();
         });
     </script>
-
-
 
 {% endblock %}

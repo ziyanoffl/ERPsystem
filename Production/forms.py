@@ -1,7 +1,5 @@
 from django import forms
-from django.forms import inlineformset_factory
 
-from Inventory.forms import ProductRawMaterialForm
 from Inventory.models import ProductRawMaterial
 from .models import Product
 
@@ -9,11 +7,14 @@ from .models import Product
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = '__all__'
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        fields = ['product_name', 'description', 'unit_price']
 
 
-ProductRawMaterialFormSet = inlineformset_factory(Product, ProductRawMaterial, form=ProductRawMaterialForm, extra=1,
-                                                  can_delete=True)
+class ProductRawMaterialForm(forms.ModelForm):
+    class Meta:
+        model = ProductRawMaterial
+        fields = ['raw_material', 'quantity_required']
+
+
+ProductRawMaterialFormSet = forms.inlineformset_factory(Product, ProductRawMaterial, form=ProductRawMaterialForm,
+                                                        extra=1)
