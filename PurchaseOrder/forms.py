@@ -1,8 +1,11 @@
 from django import forms
+
 from .models import PurchaseOrder
+
 
 class DateInput(forms.DateInput):
     input_type = 'date'
+
 
 class PurchaseOrderForm(forms.ModelForm):
     class Meta:

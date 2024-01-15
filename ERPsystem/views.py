@@ -89,7 +89,7 @@ def custom_login(request):
             messages.error(request, 'Invalid login credentials.')
 
     # Render the custom login template for GET requests
-    return render(request, '')  # Replace 'your_app/login.html' with your actual template path
+    return render(request, '')
 
 
 def signup_view(request):
