@@ -20,10 +20,11 @@ def home_view(request):
     warehouses = Warehouse.objects.all()
     production_orders = ProductionOrder.objects.all()
 
+    # Retrieve the five most recent sales orders
+    recent_sales_orders = SalesOrder.objects.order_by('-order_date')[:5]
+
     # Check for the custom context variable indicating a successful login
     login_success = request.session.pop('login_success', False)
-    # Print a message to the console
-    print(f'login_success value: {login_success}')
 
     # Data for Raw Material Inventory Chart
     raw_material_labels = [str(material) for material in RawMaterialInventory.objects.all()]
@@ -41,6 +42,7 @@ def home_view(request):
     purchase_order_labels = [str(order.raw_material) for order in PurchaseOrder.objects.all()]
     purchase_order_data = [order.quantity for order in PurchaseOrder.objects.all()]
 
+
     return render(
         request,
         'dashboard.html',
@@ -54,6 +56,7 @@ def home_view(request):
             'production_order_data': production_order_data,
             'purchase_order_labels': purchase_order_labels,
             'purchase_order_data': purchase_order_data,
+            'recent_sales_orders': recent_sales_orders,
         }
     )
 

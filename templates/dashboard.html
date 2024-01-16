@@ -27,22 +27,50 @@
     </div>
 
     <div class="mb-3">
-        <h4>Welcome, {{ user.username }}</h4>
+        <h6>Welcome, {{ user.username }}</h6>
     </div>
 
     <div class="container mt-4">
+        <div class="row ">
+            <div class="col-md-6 mb-4">
+                <h4>Recent Sales Orders</h4>
+                <table class="table table-responsive table-striped">
+                    <thead>
+                    <tr>
+                        <th>Customer</th>
+                        <th>Order Date</th>
+                        <th>Ship Date</th>
+                        <th>Status</th>
+                        <th>Total Price</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for order in recent_sales_orders %}
+                        <tr>
+                            <td>{{ order.customer }}</td>
+                            <td>{{ order.order_date }}</td>
+                            <td>{{ order.ship_date }}</td>
+                            <td>{{ order.status }}</td>
+                            <td>{{ order.total_price }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
         <div class="row">
             <div class="col-md-6">
                 <!-- Raw Material Inventory Chart -->
                 <div>
-                    <h3>Raw Material Inventory</h3>
+                    <h4>Raw Material Inventory</h4>
                     <canvas id="rawMaterialChart"></canvas>
                 </div>
             </div>
             <div class="col-md-6">
                 <!-- Product Inventory Chart -->
                 <div>
-                    <h3>Product Inventory</h3>
+                    <h4>Product Inventory</h4>
                     <canvas id="productInventoryChart"></canvas>
                 </div>
             </div>
@@ -52,14 +80,14 @@
             <div class="col-md-6">
                 <!-- Production Orders Chart -->
                 <div>
-                    <h3>Production Orders</h3>
+                    <h4>Production Orders</h4>
                     <canvas id="productionOrdersChart"></canvas>
                 </div>
             </div>
             <div class="col-md-6">
                 <!-- Purchase Orders Chart -->
                 <div>
-                    <h3>Purchase Orders</h3>
+                    <h4>Purchase Orders</h4>
                     <canvas id="purchaseOrdersChart"></canvas>
                 </div>
             </div>
