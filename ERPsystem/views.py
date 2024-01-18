@@ -6,6 +6,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 
+from ERPsystem.forms import CustomUserChangeForm
 from ERPsystem.settings import OPENAI_API_KEY
 from Inventory.models import RawMaterial, Warehouse, ProductInventory, RawMaterialInventory
 from Production.models import Product, ProductionOrder
@@ -15,6 +16,8 @@ from SalesOrder.models import SalesOrder
 
 @login_required(login_url='login_view')
 def home_view(request):
+    # Clear previous messages
+    messages.success(request, None)
     # Retrieve data for charts and table
     raw_materials = RawMaterial.objects.all()
     warehouses = Warehouse.objects.all()
@@ -41,7 +44,6 @@ def home_view(request):
     # Data for Purchase Orders Chart
     purchase_order_labels = [str(order.raw_material) for order in PurchaseOrder.objects.all()]
     purchase_order_data = [order.quantity for order in PurchaseOrder.objects.all()]
-
 
     return render(
         request,
@@ -70,6 +72,8 @@ def login_view(request):
 
 
 def custom_login(request):
+    # Clear previous messages
+    messages.success(request, None)
     if request.method == 'POST':
         # Get the username and password from the submitted form
         username = request.POST.get('username')
@@ -92,7 +96,7 @@ def custom_login(request):
             messages.error(request, 'Invalid login credentials.')
 
     # Render the custom login template for GET requests
-    return render(request, '')
+    return render(request, 'accounts/login.html')
 
 
 def signup_view(request):
@@ -109,6 +113,19 @@ def signup_view(request):
         form = UserCreationForm()
 
     return render(request, 'accounts/signup.html', {'form': form})
+
+
+@login_required
+def edit_profile(request):
+    if request.method == 'POST':
+        form = CustomUserChangeForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('login_view')
+    else:
+        form = CustomUserChangeForm(instance=request.user)
+
+    return render(request, 'accounts/edit_profile.html', {'form': form})
 
 
 # Open AI key responses

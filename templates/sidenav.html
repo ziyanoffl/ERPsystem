@@ -233,11 +233,10 @@
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-end">
-                            <a href="" class="dropdown-item">Profile</a>
+                            <a href="{% url 'edit_password' %}" class="dropdown-item">Edit Password</a>
                             {% if user.is_superuser %}
                                 <a href="{% url 'admin:index' %}" class="dropdown-item">Superuser Site</a>
                             {% endif %}
-                            <a href="#" class="dropdown-item">Setting</a>
                             <a href="{% url 'logout' %}" class="dropdown-item">Logout</a>
                         </div>
                     </li>
