@@ -1,4 +1,4 @@
-# CV-Filtering-system
+# ERP System for Discrete Manufacturing Companies
 
 ## Follow instructions to run the application on your PC
 
