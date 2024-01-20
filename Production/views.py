@@ -7,6 +7,7 @@ from django.utils import timezone
 from django.views import View
 
 from Inventory.models import ProductRawMaterial, RawMaterial, ProductInventory, RawMaterialInventory, Warehouse
+from .forms import ProductForm, ProductRawMaterialFormSet
 from .models import Product, ProductionOrder
 
 
@@ -25,32 +26,32 @@ def create_product(request):
         product_name = request.POST.get('product_name')
         description = request.POST.get('description')
         unit_price = request.POST.get('unit_price')
-        quantity_in_stock = request.POST.get('quantity_in_stock')
 
-        # Create Product
+        # Create the product
         product = Product.objects.create(
             product_name=product_name,
             description=description,
-            unit_price=unit_price,
-            quantity_in_stock=quantity_in_stock
+            unit_price=unit_price
         )
 
-        # Process raw materials
-        raw_materials = request.POST.getlist('raw_material')
-        quantities = request.POST.getlist('quantity_required')
+        # Loop through raw materials and save each one
+        raw_materials = request.POST.getlist('raw_material[]')
+        quantities_required = request.POST.getlist('quantity_required[]')
 
-        for raw_material_id, quantity in zip(raw_materials, quantities):
+        for raw_material_id, quantity_required in zip(raw_materials, quantities_required):
             raw_material = RawMaterial.objects.get(pk=raw_material_id)
             ProductRawMaterial.objects.create(
                 product=product,
                 raw_material=raw_material,
-                quantity_required=quantity
+                quantity_required=quantity_required
             )
 
-        return redirect('product_info_view')  # Change 'product_list' to your actual product list URL
+        return redirect('product_info_view')
 
-    raw_materials = RawMaterial.objects.all()
-    return render(request, 'production/add_product.html', {'raw_materials': raw_materials})
+    else:
+        raw_materials = RawMaterial.objects.all()
+        return render(request, 'production/add_product.html', {'raw_materials': raw_materials})
+
 
 
 class CreateProductionOrderView(View):
