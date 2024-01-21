@@ -131,6 +131,8 @@ def edit_profile(request):
     return render(request, 'accounts/edit_profile.html', {'form': form})
 
 
+
+
 # Open AI key responses
 def generate_openai_response(request):
     print("Function called")  # Check if the function is called

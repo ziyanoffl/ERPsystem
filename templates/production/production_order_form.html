@@ -13,6 +13,15 @@
 
 
     <div class="row">
+        {% if messages %}
+            <div class="alert col-lg-5 alert-danger" role="alert">
+                <ul class="list-unstyled">
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
         <form method="post" action="{% url 'create_production_order' %}">
             {% csrf_token %}
 
