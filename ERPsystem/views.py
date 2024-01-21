@@ -1,3 +1,5 @@
+import os
+
 import openai
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
@@ -5,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
+from dotenv import load_dotenv
 
 from ERPsystem.forms import CustomUserChangeForm
 from ERPsystem.settings import OPENAI_API_KEY
@@ -131,6 +134,7 @@ def edit_profile(request):
 # Open AI key responses
 def generate_openai_response(request):
     print("Function called")  # Check if the function is called
+    load_dotenv(override=True)
     if request.method == 'POST':
         try:
             # Extract data from the POST request
@@ -170,7 +174,7 @@ def generate_openai_response(request):
                 row_values = [str(getattr(product, field.name)) for field in product._meta.fields]
                 rows_as_csv.append(','.join(row_values))
 
-            openai.api_key = OPENAI_API_KEY
+            openai.api_key = os.getenv("OPENAI_API_KEY")
 
             # Create a prompt incorporating the database content
             prompt = f"Analyze the following data and provide brief insights: {', '.join(rows_as_csv)}"
@@ -179,7 +183,8 @@ def generate_openai_response(request):
                 messages=[
                     {"role": "system",
                      "content": "You are an intelligent AI integrated within an ERP system to provide insights and trends in data and be helpful. "
-                                "I'll send you some database data, you should act your role and give short and very very brief insights or trends"},
+                                "I'll send you some database data, you should act your role and give short and very brief insights and any trends that you identify/"
+                                "STRICTLY give response only in HTML formatting"},
                     {"role": "user", "content": prompt},
                 ],
                 model=gpt_model,
@@ -197,6 +202,7 @@ def generate_openai_response(request):
 
 
 def open_ai_chatbot(request):
+    load_dotenv(override=True)
     if request.method == 'POST':
         try:
             # Extract data from the POST request
@@ -236,17 +242,25 @@ def open_ai_chatbot(request):
                 row_values = [str(getattr(product, field.name)) for field in product._meta.fields]
                 rows_as_csv.append(','.join(row_values))
 
-            openai.api_key = OPENAI_API_KEY
+            openai.api_key = os.getenv("OPENAI_API_KEY")
 
             # Create a prompt incorporating the database content and user question
             prompt = f"This is the data: {', '.join(rows_as_csv)}\nUser Question: {user_question}"
+
+            # Check if the user question is empty
+            if not user_question.strip():
+                # If the user question is empty, request OpenAI to suggest questions
+                prompt += "\n\nSuggestions: Provide 5 suggested questions without answers."
+            else:
+                # If the user question is not empty, include it in the prompt
+                prompt += f"\nUser Question: {user_question}"
 
             response = openai.chat.completions.create(
                 messages=[
                     {"role": "system",
                      "content": "You are an intelligent AI integrated within an ERP system to provide insights and trends in data and to be helpful.\
-                      I'll send you some database data and add a question about that data, give correct and brief answers to them.\
-                       If the question is empty after User Question: ,list 5 suggested questions without answers."},
+                      I'll send you some database data, based on the prompt reply correctly."
+                     "STRICTLY Give responses only in HTML formatting"},
                     {"role": "user", "content": prompt},
                 ],
                 model=gpt_model,
@@ -254,7 +268,7 @@ def open_ai_chatbot(request):
             )
 
             response_message = response.choices[0].message.content
-            print(prompt)
+            print(response_message)
 
             return JsonResponse({'generated_response': response_message})
         except Exception as e:

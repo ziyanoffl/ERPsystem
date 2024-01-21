@@ -14,7 +14,7 @@
 
         <form action="" method="post">
             {% csrf_token %}
-            <div class="col-3">
+            <div class="col-lg-3">
                 {{ form.as_p }}
             </div>
             <button class="btn btn-outline-dark px-5" type="submit">Save</button>
@@ -22,7 +22,7 @@
 
         <h4 class="mt-5">Raw Materials list</h4>
         <div class="row">
-            <div class="col-12">
+            <div class="col-lg-12">
                 <table id="example" class="table table-striped">
                     <thead>
                     <tr>

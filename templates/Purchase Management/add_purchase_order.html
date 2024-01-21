@@ -14,11 +14,11 @@
 
         <form method="post" action="{% url 'create_purchase_order' %}">
             {% csrf_token %}
-            <div class="col-4">
+            <div class="col-lg-4">
 
                 {{ form.as_p }}
 
-                <input type="submit" value="Save">
+                <input class="btn btn-primary" type="submit" value="Add Purchase Order">
             </div>
         </form>
 

@@ -31,7 +31,7 @@
             <option value="recent_purchases">Recent Purchases</option>
             <option value="product_inventory">Product Inventory</option>
             <option value="raw_material_inventory">Raw Material Inventory</option>
-            <option value="product">Product Table</option>
+            <option value="product">Product Information</option>
             <!-- Add more options as needed -->
         </select>
     </div>
@@ -51,13 +51,9 @@
         </div>
     </div>
 
-    <pre>
-        <code>
-            <div id="responseContainer" class="">
-                <!-- The generated response will be displayed here -->
-            </div>
-        </code>
-    </pre>
+    <div id="responseContainer" class="mb-4">
+        <!-- The generated response will be displayed here -->
+    </div>
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script>
@@ -78,11 +74,6 @@
                 // Check if the user question is empty
                 var isUserQuestionEmpty = !userQuestion.trim();
 
-                // Add small title for suggested questions
-                if (isUserQuestionEmpty) {
-                    $("#responseContainer").html('<h6>Suggested Questions</h6>');
-                }
-
                 // Make AJAX request to the generate_openai_response endpoint with the selected table type and user question
                 $.ajax({
                     url: '/open_ai_chatbot/',
@@ -99,14 +90,7 @@
                         // Hide loading animation
                         $("#loadingAnimation").hide();
 
-                        // Display the generated response in the response container
-                        if (isUserQuestionEmpty) {
-                            // If user question is empty, append the response after the suggested questions title
-                            $("#responseContainer").append(response.generated_response);
-                        } else {
-                            // If user question is not empty, replace the content with the response
-                            $("#responseContainer").html(response.generated_response);
-                        }
+                        $("#responseContainer").html(response.generated_response);
                     },
                     error: function (error) {
                         console.error('Error:', error);

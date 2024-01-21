@@ -14,7 +14,7 @@
     <div class="">
         <form method="post" class="mt-5" action="{% url 'create_product' %}">
             {% csrf_token %}
-            <div class="col-4">
+            <div class="col-lg-4">
                 <!-- Product Fields -->
                 <div class="mb-3">
                     <label for="product_name" class="form-label">Product Name:</label>
@@ -34,12 +34,12 @@
 
 
             <!-- Raw Material Fields -->
-            <div class="col-6">
+            <div class="col-lg-6">
                 <!-- Raw Material Fields -->
                 <h2>Raw Materials</h2>
                 <div id="raw-material-fields">
                     <div class="row raw-material-row">
-                        <div class="col-4">
+                        <div class="col-lg-4">
                             <label class="form-label">Raw Material:</label>
                             <select name="raw_material[]" class="form-select" required>
                                 {% for raw_material in raw_materials %}
@@ -47,11 +47,11 @@
                                 {% endfor %}
                             </select>
                         </div>
-                        <div class="col-4">
+                        <div class="col-lg-4">
                             <label class="form-label">Quantity Required:</label>
                             <input type="text" name="quantity_required[]" class="form-control" required>
                         </div>
-                        <div class="col-3 mt-4">
+                        <div class="col-lg-3 mt-4">
                             <label class="form-label"></label>
                             <button type="button" class="btn btn-danger remove-row">Remove</button>
                         </div>
