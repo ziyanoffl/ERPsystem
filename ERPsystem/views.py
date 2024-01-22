@@ -10,7 +10,6 @@ from django.shortcuts import render, redirect
 from dotenv import load_dotenv
 
 from ERPsystem.forms import CustomUserChangeForm
-from ERPsystem.settings import OPENAI_API_KEY
 from Inventory.models import RawMaterial, Warehouse, ProductInventory, RawMaterialInventory
 from Production.models import Product, ProductionOrder
 from PurchaseOrder.models import PurchaseOrder
@@ -131,8 +130,6 @@ def edit_profile(request):
     return render(request, 'accounts/edit_profile.html', {'form': form})
 
 
-
-
 # Open AI key responses
 def generate_openai_response(request):
     print("Function called")  # Check if the function is called
@@ -186,7 +183,7 @@ def generate_openai_response(request):
                     {"role": "system",
                      "content": "You are an intelligent AI integrated within an ERP system to provide insights and trends in data and be helpful. "
                                 "I'll send you some database data, you should act your role and give short and very brief insights and any trends that you identify/"
-                                "STRICTLY give response only in HTML formatting"},
+                                "STRICTLY give response only in HTML format like using divs, small headings and lists"},
                     {"role": "user", "content": prompt},
                 ],
                 model=gpt_model,
@@ -262,7 +259,7 @@ def open_ai_chatbot(request):
                     {"role": "system",
                      "content": "You are an intelligent AI integrated within an ERP system to provide insights and trends in data and to be helpful.\
                       I'll send you some database data, based on the prompt reply correctly."
-                     "STRICTLY Give responses only in HTML formatting"},
+                                "STRICTLY give response only in HTML format like using divs, small headings and lists"},
                     {"role": "user", "content": prompt},
                 ],
                 model=gpt_model,
