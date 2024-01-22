@@ -8,7 +8,7 @@
 
 ### Setup
 
-To run this project, you need to have Python 3.10 installed on your computer. Then follow these steps:
+To run this project, you need to have Python 3.10 installed on your computer. open a command prompt window, then follow these steps:
 
 1. Clone this repository to your local machine.
     ```bash
@@ -31,7 +31,14 @@ To run this project, you need to have Python 3.10 installed on your computer. Th
     DB_PORT=3306
    ```
 6. Create a database in mysql with the name "erp_system"
-7. Apply database migrations:
+   ```bash
+    mysql -u root -p -e "CREATE DATABASE erp_system"
+    ```
+7. Import sample data from mysql file to the database
+   ```bash
+    mysql -u root -p erp_system < erp_system.sql
+    ```
+8. Apply database migrations:
 
     ```bash
     python manage.py makemigrations
@@ -39,10 +46,10 @@ To run this project, you need to have Python 3.10 installed on your computer. Th
    ```bash
     python manage.py migrate
     ```
-8. Create a superuser account for the Django admin:
+9. Create a superuser account for the Django admin:
 
     ```bash
     python manage.py createsuperuser
     ```
-9. Run the application with the command `python manage.py runserver`
-10. Open your browser and go to `http://127.0.0.1:8000`
+10. Run the application with the command `python manage.py runserver`
+11. Open your browser and go to `http://127.0.0.1:8000`

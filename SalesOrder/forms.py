@@ -1,16 +1,18 @@
 from django import forms
 
-from .models import SalesOrder
+from .models import SalesOrder, Customer
 
 
 class SalesOrderForm(forms.ModelForm):
+    customer = forms.ModelChoiceField(queryset=Customer.objects.all(),
+                                      widget=forms.Select(attrs={'class': 'form-control', 'style': 'width: 33.33%'}))
+
     class Meta:
         model = SalesOrder
         fields = ['customer', 'order_date', 'ship_date', 'status', 'total_price']
         widgets = {
             'order_date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control', 'style': 'width: 33.33%'}),
             'ship_date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control', 'style': 'width: 33.33%'}),
-            'customer': forms.TextInput(attrs={'class': 'form-control', 'style': 'width: 33.33%'}),
             'status': forms.Select(attrs={'class': 'form-select', 'style': 'width: 33.33%'}),
             'total_price': forms.NumberInput(attrs={'class': 'form-control', 'style': 'width: 33.33%'}),
         }

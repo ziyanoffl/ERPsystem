@@ -1,5 +1,4 @@
-from datetime import timedelta
-
+from django.contrib import messages
 from django.db import transaction
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
@@ -7,7 +6,6 @@ from django.utils import timezone
 from django.views import View
 
 from Inventory.models import ProductRawMaterial, RawMaterial, ProductInventory, RawMaterialInventory, Warehouse
-from .forms import ProductForm, ProductRawMaterialFormSet
 from .models import Product, ProductionOrder
 
 
@@ -53,7 +51,6 @@ def create_product(request):
         return render(request, 'production/add_product.html', {'raw_materials': raw_materials})
 
 
-
 class CreateProductionOrderView(View):
     template_name = 'production/production_order_form.html'
 
@@ -84,7 +81,8 @@ class CreateProductionOrderView(View):
 
         # Check if there are enough raw materials
         if not self.has_enough_raw_materials(product_id, quantity, warehouse_id):
-            return JsonResponse({'success': False, 'message': 'Not enough raw materials. Production order canceled.'})
+            messages.error(request, 'Not enough raw materials. Production order canceled.')
+            return redirect('create_production_order')
 
         with transaction.atomic():
             # Create a new production order
@@ -132,8 +130,8 @@ class CreateProductionOrderView(View):
 
                 if raw_material_inventory.quantity_on_hand < required_quantity:
                     production_order.delete()  # Cancel the production order
-                    return JsonResponse(
-                        {'success': False, 'message': 'Not enough raw materials. Production order canceled.'})
+                    messages.error(request, 'Not enough raw materials. Production order canceled.')
+                    return redirect('create_production_order')
 
                 raw_material_inventory.quantity_on_hand -= required_quantity
                 raw_material_inventory.total_cost -= (required_quantity * raw_material_inventory.unit_cost)
