@@ -58,10 +58,10 @@ To run this project, you need to have Python 3.10 installed on your computer. op
 
 ![image](https://github.com/user-attachments/assets/d95dfdbb-3ab6-49ad-9d8d-76abfe0fe833)
 
-![image](https://github.com/user-attachments/assets/b2a67a15-6329-4a6a-a1aa-7b4cbeb01750)
+![image](https://github.com/user-attachments/assets/1a17f8e7-9d7f-4aa2-8818-5034ef3c029f)
 
+![image](https://github.com/user-attachments/assets/9206858b-dbba-4816-909c-b890b50b1ae7)
 
-![image](https://github.com/user-attachments/assets/d0b64a03-04cf-4114-92b8-4453243ceb61)
 
 
 
